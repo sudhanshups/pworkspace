@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+               
+               
+<context:component-scan base-package="com.javatpoint" />
+
+  
+<bean id="studentbean" class="com.javatpoint.Student">  
+<property name="name" value="Vimal Jaiswal"></property>  
+</bean>
+
+<bean id="sb1" class="com.javatpoint.Student">  
+<constructor-arg value="Abc"></constructor-arg>
+</bean>  
+<bean id="sb2" class="com.javatpoint.Student">  
+<constructor-arg value="5"></constructor-arg>
+</bean>
+
+<bean id="sb3" class="com.javatpoint.Student">  
+<constructor-arg value="10" type="int"></constructor-arg>
+</bean>  
+
+<bean id="sb4" class="com.javatpoint.Student">  
+<constructor-arg value="Ankit"></constructor-arg>
+<constructor-arg value="11" type="int"></constructor-arg>
+</bean> 
+
+<bean id="sb5" class="com.javatpoint.Student">  
+<constructor-arg value="Ankit"></constructor-arg>
+<constructor-arg value="11" type="int"></constructor-arg>
+<constructor-arg>  
+<list>
+<ref bean="s1"/>  
+<ref bean="s2"/>  
+</list>
+</constructor-arg>
+</bean>  
+
+<bean id="sb6" class="com.javatpoint.Student" parent="sb3">  
+<constructor-arg value="Ram"></constructor-arg>
+<constructor-arg>  
+<list>
+<ref bean="s2"/>  
+<ref bean="s3"/>  
+</list>
+</constructor-arg>
+</bean>  
+
+<bean id="sb7" class="com.javatpoint.Student">  
+<property name="roll" value = "7"></property>
+<property name="name" value = "shahz"></property>
+<property name="subjects">
+<list>
+<ref bean="s1"/>  
+<ref bean="s2"/>  
+<ref bean="s3"/>  
+</list>
+</property>
+</bean> 
+  
+<bean id="s1" class = "com.javatpoint.Subject" >
+<constructor-arg value = "Math"></constructor-arg>
+</bean>
+
+<bean id="s2" class = "com.javatpoint.Subject" >
+<constructor-arg value = "Physics"></constructor-arg>
+</bean>
+
+<bean id="s3" class = "com.javatpoint.Subject" >
+<property name="subject" value = "Chemistry"></property>
+</bean>
+
+</beans>

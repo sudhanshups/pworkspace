@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding= "UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="data-mapper">
+    <select id="selectAllEmp" resultType="com.javatpoint.beans.Emp">
+        select * from testdb..employee
+    </select>
+
+    <!-- <select id ="selectOnePerson" resultType="com.javatpoint.beans.Emp">
+        select * from person where id = #{id}
+    </select> -->
+    
+</mapper>

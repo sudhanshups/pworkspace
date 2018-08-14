@@ -1,0 +1,12 @@
+1. Assuming 2 restaurant are same if they are longitude latitude are not differing more than 100
+2. All Delivery happening in same time zone.
+3. OrderId is string(using area specific ids to see results).
+4. Past time is invalid Order. [List of validator should not allow this to proceed further.]
+5. If DE is within min kms, he shall we choosen for delivery.
+6. IF no DE found within max kms, order can't be served.
+7. Validator are not implemented as of now.
+8. Log Error / Log Debugs are skipped for time being.
+9. Sys Outs used where ever logs to be used.
+10. Everything is in memory, no external storage used.
+11. No exception bubbling is used for time being.
+12. NULL is set as deId to identify unused DE.

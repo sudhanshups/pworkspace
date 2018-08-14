@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function validate_myform()
+	{
+		var n1=document.myform.num1.value;
+		var n2=document.myform.num2.value;
+		if(n1.trim().length ==0||isNaN(n1))
+			{
+			alert ("Num1 is either is empty of not a number");
+			return false;
+			}
+		if(n2.trim().length ==0||isNaN(n2))
+		{
+		alert ("Num2 is either is empty of not a number");
+		 	return false;
+		}
+		return true;
+	}
+
+</script>
+
+
+</head>
+<body>
+	   <form name ="myform" action ="multiply.jsp" 
+	     method="post"  onsubmit="return validate_myform();">
+  		 No 1 <input type="text" name="num1" >
+  		 <br>
+   		 No 2 <input type="text" name="num2" >
+   	     <br>
+   	     <input type="submit" value="multiply">
+  	 </form> 
+
+</body>
+</html>
