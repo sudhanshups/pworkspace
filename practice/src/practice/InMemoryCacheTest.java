@@ -1,12 +1,10 @@
 package practice;
  
 import java.util.ArrayList;
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.map.LRUMap;
- 
+
 class InMemoryCache<K, T> {
  
-    private long timeToLive;
+   /* private long timeToLive;
     @SuppressWarnings("rawtypes")
 	private LRUMap CacheMap;
  
@@ -99,7 +97,7 @@ class InMemoryCache<K, T> {
             }
             Thread.yield();
         }
-    }
+    }*/
 }
 
 public class InMemoryCacheTest {
@@ -121,7 +119,7 @@ public class InMemoryCacheTest {
         // Test with timeToLiveInSeconds = 200 seconds
         // timerIntervalInSeconds = 500 seconds
         // maxItems = 6
-        InMemoryCache<String, String> cache = new InMemoryCache<String, String>(200, 500, 6);
+        /*InMemoryCache<String, String> cache = new InMemoryCache<String, String>(200, 500, 6);
  
         cache.put("eBay", "eBay");
         cache.put("Paypal", "Paypal");
@@ -136,12 +134,12 @@ public class InMemoryCacheTest {
  
         cache.put("Twitter", "Twitter");
         cache.put("SAP", "SAP");
-        System.out.println("Two objects Added but reached maxItems.. cache.size(): " + cache.size());
+        System.out.println("Two objects Added but reached maxItems.. cache.size(): " + cache.size());*/
  
     }
  
     private void TestExpiredCacheObjects() throws InterruptedException {
- 
+ /*
         // Test with timeToLiveInSeconds = 1 second
         // timerIntervalInSeconds = 1 second
         // maxItems = 10
@@ -153,7 +151,7 @@ public class InMemoryCacheTest {
         // Cache because of timeToLiveInSeconds value
         Thread.sleep(3000);
  
-        System.out.println("Two objects are added but reached timeToLive. cache.size(): " + cache.size());
+        System.out.println("Two objects are added but reached timeToLive. cache.size(): " + cache.size());*/
  
     }
  
@@ -163,7 +161,7 @@ public class InMemoryCacheTest {
         // Test with timeToLiveInSeconds = 100 seconds
         // timerIntervalInSeconds = 100 seconds
         // maxItems = 500000
- 
+ /*
         InMemoryCache<String, String> cache = new InMemoryCache<String, String>(100, 100, 500000);
  
         for (int i = 0; i < size; i++) {
@@ -177,7 +175,7 @@ public class InMemoryCacheTest {
         cache.cleanup();
         double finish = (double) (System.currentTimeMillis() - start) / 1000.0;
  
-        System.out.println("Cleanup times for " + size + " objects are " + finish + " s");
+        System.out.println("Cleanup times for " + size + " objects are " + finish + " s");*/
  
     }
 }

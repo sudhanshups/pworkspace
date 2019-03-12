@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -90,16 +91,15 @@ public class CF473_1 {
         ArrayList<Integer> query = new ArrayList<>(Arrays.asList(4, 5, 6, 7, 0, 1, 2));
         ArrayList<String> query1 = new ArrayList<>(Arrays.asList(""));
         int[] arr = new int[]{1,2}; */
-        Set<Long> set = new HashSet<>();
-        set.add(1l);
-        set.add(2l);
-        System.out.println(set);
+/*
+        LocalDateTime fromTime = LocalDateTime.now().plusMinutes(1);
+        LocalDateTime toTime = LocalDateTime.now();
+        if(fromTime.compareTo(toTime)<0){
+            System.out.println("from time smaller than to time");
+        }
 
-        List<Long> longs = new ArrayList<>();
-        longs.add(1l);
-        longs.add(2l);
-        System.out.println(longs);
 
+        System.out.println(maxLen(new int[]{1, 0, 0, 1, 0, 1, 1}, 7));
 
         if ((1 & 1) == 1) {
             System.out.println(1 & 1);
@@ -121,6 +121,160 @@ public class CF473_1 {
         //System.out.println(flowerBouquets(3, 2, "00010001"));
         //}
 
+        */
+
+        //System.out.println( AmazingSubarrays("pGpEusuCSWEaPOJmamlFAnIBgAJGtcJaMPFTLfUfkQKXeymydQsdWCTyEFjFgbSmknAmKYFHopWceEyCSumTyAFwhrLqQXbWnXSn"));
+        ArrayList<String> a = new ArrayList<>();
+        fullJustify(new ArrayList<>(Arrays.asList("lkgyyrqh", "qrdqusnh", "zyu", "w", "ukzxyykeh", "zmfqafqle", "e", "ajq", "kagjss", "mihiqla", "qekf", "ipxbpz", "opsndtyu", "x", "ec", "cbd", "zz", "yzgx", "qbzaffgf", "i", "atstkrdph", "jgx", "qiy", "jeythmm", "qgqvyz", "dfagnfpwat", "sigxajhjt", "zx", "hwmcgss" )),
+                178).stream().forEach(u -> System.out.println(u + u.length()));
+
+    }
+
+    public static ArrayList<String> fullJustify(ArrayList<String> A, int B) {
+        List<List<String>> lines = new ArrayList<>();
+        if (A.size() == 0)
+            return new ArrayList<>();
+        else if (A.size() == 1) {
+            ArrayList<String> s = new ArrayList<>();
+            String x = new String();
+            for (int j = 0; j < B - A.get(0).length(); j++)
+                x = x + " ";
+            x = A.get(0) + x;
+            s.add(x);
+            return s;
+        }
+
+        List<Integer> spaces = new ArrayList<>();
+        int l = 0;
+        List<String> line = new ArrayList<>();
+        for (String a : A) {
+            if (l + line.size() + a.length() > B) {
+                lines.add(line);
+                spaces.add(B - l);
+                l = 0;
+                line = new ArrayList<>();
+            }
+            line.add(a);
+            l += a.length();
+        }
+        lines.add(line);
+        spaces.add(B - l);
+
+        ArrayList<String> res = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            List<String> oneLine = lines.get(i);
+            int space = spaces.get(i);
+            boolean last = false;
+            if (i == lines.size() - 1)
+                last = true;
+
+            StringBuilder s = new StringBuilder();
+            if (!last) {
+                for (int k = 0; k < oneLine.size(); k++) {
+                    int seg = ((oneLine.size() - 1 - k) == 0) ? space : (space / (oneLine.size() - 1 - k));
+                    int r = (oneLine.size() - 1-k)==0 ?0 : (space % (oneLine.size() - 1-k));
+                    if (r > 0)
+                        seg++;
+
+                    String a = oneLine.get(k);
+                    s.append(a);
+                    if (space < seg) {
+                        for (int j = 0; j < space; j++)
+                            s.append(" ");
+                        space = 0;
+                    } else {
+                        for (int j = 0; j < seg; j++)
+                            s.append(" ");
+                        space = space - seg;
+                    }
+                    if (k >= 1 && k == oneLine.size() - 2) {
+                        for (int j = 0; j < space; j++)
+                            s.append(" ");
+                        space = 0;
+                    } else if (k == oneLine.size() - 1) {
+                        for (int j = 0; j < space; j++)
+                            s.append(" ");
+                    }
+
+                }
+            } else {
+                for (int k = 0; k < oneLine.size(); k++) {
+                    String a = oneLine.get(k);
+                    s.append(a);
+                    if(space>0) {
+                        s.append(" ");
+                        space--;
+                    }
+                }
+                for (int j = 0; j < space; j++)
+                    s.append(" ");
+            }
+            res.add(s.toString());
+        }
+
+        return res;
+    }
+
+    public static int AmazingSubarrays(String a) {
+        int mod = 10003;
+        int no = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) == 'a' || a.charAt(i) == 'A' ||
+                    a.charAt(i) == 'e' || a.charAt(i) == 'E' ||
+                    a.charAt(i) == 'i' || a.charAt(i) == 'I' ||
+                    a.charAt(i) == 'o' || a.charAt(i) == 'O' ||
+                    a.charAt(i) == 'u' || a.charAt(i) == 'U') {
+
+                no = (no + (a.length() - i)) % mod;
+            }
+        }
+        return no;
+
+    }
+
+
+    static int maxLen(int arr[], int n) {
+        // max len of equal o and 1
+        // maxLen(new int[]{1, 0, 0, 1, 0, 1, 1}, 7)
+        // Creates an empty hashMap hM
+
+        HashMap<Integer, Integer> hM = new HashMap<Integer, Integer>();
+
+        int sum = 0;     // Initialize sum of elements
+        int max_len = 0; // Initialize result
+        int ending_index = -1;
+        int start_index = 0;
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = (arr[i] == 0) ? -1 : 1;
+        }
+        // Traverse through the given array
+        for (int i = 0; i < n; i++) {
+            // Add current element to sum
+            sum += arr[i];
+            // To handle sum=0 at last index
+            if (sum == 0) {
+                max_len = i + 1;
+                ending_index = i;
+            }
+            // If this sum is seen before, then update max_len
+            // if required
+            if (hM.containsKey(sum)) {
+                if (max_len < i - hM.get(sum + n)) {
+                    max_len = i - hM.get(sum + n);
+                    ending_index = i;
+                }
+            } else // Else put this sum in hash table
+                hM.put(sum + n, i);
+        }
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = (arr[i] == -1) ? 0 : 1;
+        }
+
+        int end = ending_index - max_len + 1;
+        System.out.println(end + " to " + ending_index);
+        return max_len;
     }
 
     public static int flowerBouquets(int p, int q, String s) {
