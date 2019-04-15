@@ -2,37 +2,37 @@ package practice;
 
 import java.util.Stack;
 
-class tNode {
-    int data;
-    tNode l;
-    tNode r;
-
-    tNode(int data) {
-        this.data = data;
-        l = r = null;
-    }
-
-    tNode(int data, tNode l, tNode r) {
-        this.data = data;
-        this.l = l;
-        this.r = r;
-    }
-}
 
 public class BinarySearchTree {
+    class Node {
+        int data;
+        Node l;
+        Node r;
 
-    tNode root = null;
-    Stack<tNode> fs = new Stack<tNode>();
-    Stack<tNode> bs = new Stack<tNode>();
-    tNode cur1, cur2;
+        Node(int data) {
+            this.data = data;
+            l = r = null;
+        }
+
+        Node(int data, Node l, Node r) {
+            this.data = data;
+            this.l = l;
+            this.r = r;
+        }
+    }
+
+    Node root = null;
+    Stack<Node> fs = new Stack<>();
+    Stack<Node> bs = new Stack<>();
+    Node cur1, cur2;
 
     void initialize() {
         cur1 = cur2 = root;
     }
 
     void insert(int data) {
-        tNode n = new tNode(data);
-        tNode i = root, prev = root;
+        Node n = new Node(data);
+        Node i = root, prev = root;
         while (i != null) {
             prev = i;
             if (n.data <= i.data)
@@ -90,7 +90,24 @@ public class BinarySearchTree {
         inOrder(root);
     }
 
-    void inOrder(tNode root) {
+    void findSumExist(int n) {
+        initialize();
+        int l = inorder_next();
+        int r = rinorder_next();
+        while (l < r) {
+            System.out.println(l + " " + r);
+            if (l + r == n) {
+                System.out.println("sum found" + l + " " + r);
+                break;
+            } else if (n > l + r) {
+                l = inorder_next();
+            } else {
+                r = rinorder_next();
+            }
+        }
+    }
+
+    void inOrder(Node root) {
         if (root == null)
             return;
         if (root.l != null)
@@ -98,6 +115,65 @@ public class BinarySearchTree {
         System.out.print(root.data + " --> ");
         if (root.r != null)
             inOrder(root.r);
+    }
+
+    int lCABSearchTree(int a, int b) {
+        if (root == null)
+            return 0;
+        Node temp = root;
+        while (true) {
+            if (temp.data > a && temp.data > b) {
+                temp = temp.l;
+            } else if (temp.data < a && temp.data < b) {
+                temp = temp.r;
+            } else {
+                break;
+            }
+        }
+        return temp.data;
+    }
+
+    private void printkdistanceDownNodes(Node root, int k) {
+        if (root == null || k < 0) {
+            return;
+        }
+        if (k == 0) {
+            System.out.print(root.data + " ");
+        } else {
+            printkdistanceDownNodes(root.l, k - 1);
+            printkdistanceDownNodes(root.r, k - 1);
+        }
+    }
+
+    int printkdistanceNode(Node root, int target, int k) {
+        if (root == null) {
+            return -1;
+        }
+        if (root.data == target) {
+            printkdistanceDownNodes(root, k);
+            return 0;
+        }
+        int dt = printkdistanceNode(root.l, target, k);
+        if (dt != -1) {
+            if (dt + 1 == k) {
+                System.out.print(root.data + " ");
+            } else {
+                printkdistanceDownNodes(root.r, k - dt - 2);
+            }
+            return dt + 1;
+        }
+
+        dt = printkdistanceNode(root.r, target, k);
+        if (dt != -1) {
+            if (dt + 1 == k) {
+                System.out.print(root.data + " ");
+            } else {
+                printkdistanceDownNodes(root.l, k - dt - 2);
+            }
+            return dt + 1;
+        }
+
+        return -1;
     }
 
     public static void main(String args[]) {
@@ -112,27 +188,26 @@ public class BinarySearchTree {
         }
         System.out.println();
         bst.inOrder();
-        bst.initialize();
-        int l = bst.inorder_next();
-        int r = bst.rinorder_next();
-        int n = 0;
-        while (l < r) {
-            System.out.println(l + " " + r);
-            if (l + r == n) {
-                System.out.println("sum found" + l + " " + r);
-                break;
-            } else if (n > l + r) {
-                l = bst.inorder_next();
-            } else {
-                r = bst.rinorder_next();
-            }
-        }
+        bst.findSumExist(8);
         System.out.println();
 
+        //Common ancester
+        bst = new BinarySearchTree();
+        for (int i = 0; i < arr.length; i++) {
+            bst.insert(arr[i]);
+        }
+        bst.inOrder();
+        System.out.println();
+        System.out.println("" +
+                "      /5\\\n" +
+                " 1\\        /8\n" +
+                "  /3\\    /7\n" +
+                " 2   4   6");
 
-        Class c = arr.getClass();
-        String name = c.getName();
-        System.out.println("=" + name);
+        System.out.println("Binary Search Tree Lowest Common ancestor of 2 ,4 is " + bst.lCABSearchTree(2, 4));
 
+        // System.out.println("Binary Tree Lowest Common ancestor of 2 ,4 is " + bst.lCABTree(2, 4));
+        System.out.println("3 distance nodes ");
+        bst.printkdistanceNode(bst.root, 1, 2);
     }
 }

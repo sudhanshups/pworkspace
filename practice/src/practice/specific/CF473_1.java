@@ -124,11 +124,141 @@ public class CF473_1 {
         */
 
         //System.out.println( AmazingSubarrays("pGpEusuCSWEaPOJmamlFAnIBgAJGtcJaMPFTLfUfkQKXeymydQsdWCTyEFjFgbSmknAmKYFHopWceEyCSumTyAFwhrLqQXbWnXSn"));
-        ArrayList<String> a = new ArrayList<>();
-        fullJustify(new ArrayList<>(Arrays.asList("lkgyyrqh", "qrdqusnh", "zyu", "w", "ukzxyykeh", "zmfqafqle", "e", "ajq", "kagjss", "mihiqla", "qekf", "ipxbpz", "opsndtyu", "x", "ec", "cbd", "zz", "yzgx", "qbzaffgf", "i", "atstkrdph", "jgx", "qiy", "jeythmm", "qgqvyz", "dfagnfpwat", "sigxajhjt", "zx", "hwmcgss" )),
-                178).stream().forEach(u -> System.out.println(u + u.length()));
+//        ArrayList<String> a = new ArrayList<>();
+//        fullJustify(new ArrayList<>(Arrays.asList("lkgyyrqh", "qrdqusnh", "zyu", "w", "ukzxyykeh", "zmfqafqle", "e", "ajq", "kagjss", "mihiqla", "qekf", "ipxbpz", "opsndtyu", "x", "ec", "cbd", "zz", "yzgx", "qbzaffgf", "i", "atstkrdph", "jgx", "qiy", "jeythmm", "qgqvyz", "dfagnfpwat", "sigxajhjt", "zx", "hwmcgss" )),
+//                178).stream().forEach(u -> System.out.println(u + u.length()));
+
+/*        String a = "5121478262 8070067M75 X199R 547 8C0A11 93I630 4P4071 029W433619 M3 5 14703818 776366059B9O43393";
+        System.out.println(atoi(a));*/
+
+/*        String str = "forgeeksskeegfor";
+        System.out.println("Length is: " + longestPalSubstr(str));*/
+
+        System.out.println(isPowerOf2("20") + "\n" + isPowerOf2("124684622466842024680246842024662202000002") + "\n"
+                + isPowerOf2("1") + "\n" + isPowerOf2("128") + "\n");
 
     }
+
+    static boolean isPowerOf2(String A) {
+
+        if(A.length() == 1 && A.charAt(A.length() - 1) == '1'){
+            return true;
+        }
+
+        if (A.length() == 1 && (A.charAt(A.length() - 1) - '0') % 2 == 1) {
+            return false;
+        }
+        int num = 0;
+        String B = new String();
+
+        while (A.length() != 1 || (A.charAt(A.length() - 1) - '0') % 2 != 1) {
+            if ((A.charAt(A.length() - 1) - '0') % 2 == 1)
+                break;
+
+            for (int i = 0, j = 0; i < A.length(); i++) {
+                num = num * 10 + A.charAt(i) - '0';
+                if (num < 2) {
+                    if (i != 0) {
+                        B += '0';
+                    }
+                    continue;
+                }
+
+                B += (char) (num / 2 + '0');
+                num = num % 2;
+            }
+            A = B;
+            B = new String();
+        }
+
+        if (A.length() == 1 && A.charAt(0) == '1') {
+            return true;
+        }
+        //if (A.length() > 1 && (A.charAt(A.length() - 1) - '0') % 2 == 1) {
+        return false;
+
+    }
+
+    static String longestPalSubstr(String A) {
+        int maxLength = 1;
+
+        int start = 0;
+        int len = A.length();
+
+        int low, high;
+
+        for (int i = 1; i < len; ++i) {
+            // even length palindrome with center points as i-1 and i.
+            low = i - 1;
+            high = i;
+            while (low >= 0 && high < len && A.charAt(low) == A.charAt(high)) {
+                if (high - low + 1 > maxLength) {
+                    start = low;
+                    maxLength = high - low + 1;
+                }
+                --low;
+                ++high;
+            }
+
+            // odd length palindrome with center point as i
+            low = i - 1;
+            high = i + 1;
+            while (low >= 0 && high < len && A.charAt(low) == A.charAt(high)) {
+                if (high - low + 1 > maxLength) {
+                    start = low;
+                    maxLength = high - low + 1;
+                }
+                --low;
+                ++high;
+            }
+        }
+
+        return A.substring(start, start + maxLength);
+
+    }
+
+
+    public static int atoi(String a) {
+        boolean pos = true;
+        String n = new String();
+        long num = 0;
+        int d = 10;
+        char p = '+';
+        int w = 0;
+        for (char c : a.toCharArray()) {
+
+            if (c == '-') {
+                pos = false;
+                w++;
+                continue;
+            }
+            if (c == '+') {
+                w++;
+                continue;
+            }
+            if (w > 1)
+                return 0;
+            if ((c == ' ' || c < '0' || c > '9') && (c != '-' && c != '+')) {
+                break;
+            }
+
+            int x = (int) num * d + (c - '0');
+
+            if (!pos && x / 10 != num) {
+                return Integer.MIN_VALUE;
+            }
+            if (pos && x / 10 != num) {
+                return Integer.MAX_VALUE;
+            }
+            num = x;
+
+        }
+        if (!pos)
+            return -(int) num;
+
+        return (int) num;
+    }
+
 
     public static ArrayList<String> fullJustify(ArrayList<String> A, int B) {
         List<List<String>> lines = new ArrayList<>();
@@ -172,7 +302,7 @@ public class CF473_1 {
             if (!last) {
                 for (int k = 0; k < oneLine.size(); k++) {
                     int seg = ((oneLine.size() - 1 - k) == 0) ? space : (space / (oneLine.size() - 1 - k));
-                    int r = (oneLine.size() - 1-k)==0 ?0 : (space % (oneLine.size() - 1-k));
+                    int r = (oneLine.size() - 1 - k) == 0 ? 0 : (space % (oneLine.size() - 1 - k));
                     if (r > 0)
                         seg++;
 
@@ -201,7 +331,7 @@ public class CF473_1 {
                 for (int k = 0; k < oneLine.size(); k++) {
                     String a = oneLine.get(k);
                     s.append(a);
-                    if(space>0) {
+                    if (space > 0) {
                         s.append(" ");
                         space--;
                     }
