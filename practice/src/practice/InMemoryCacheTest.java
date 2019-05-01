@@ -1,27 +1,30 @@
 package practice;
  
+import org.apache.commons.collections.MapIterator;
+import org.apache.commons.collections.map.LRUMap;
+
 import java.util.ArrayList;
 
 class InMemoryCache<K, T> {
  
-   /* private long timeToLive;
+    private long timeToLive;
     @SuppressWarnings("rawtypes")
 	private LRUMap CacheMap;
- 
+
     protected class CacheObject {
         public long lastAccessed = System.currentTimeMillis();
         public T value;
- 
+
         protected CacheObject(T value) {
             this.value = value;
         }
     }
- 
+
     public InMemoryCache(long TimeToLive, final long TimerInterval, int maxItems) {
         this.timeToLive = TimeToLive * 1000;
- 
+
         CacheMap = new LRUMap(maxItems);
- 
+
         if (timeToLive > 0 && TimerInterval > 0) {
             Thread t = new Thread(new Runnable() {
                 public void run() {
@@ -38,18 +41,18 @@ class InMemoryCache<K, T> {
             t.start();
         }
     }
- 
+
     public void put(K key, T value) {
         synchronized (CacheMap) {
             CacheMap.put(key, new CacheObject(value));
         }
     }
- 
+
     @SuppressWarnings("unchecked")
     public T get(K key) {
         synchronized (CacheMap) {
             CacheObject c = (CacheObject) CacheMap.get(key);
- 
+
             if (c == null)
                 return null;
             else {
@@ -58,30 +61,30 @@ class InMemoryCache<K, T> {
             }
         }
     }
- 
+
     public void remove(K key) {
         synchronized (CacheMap) {
             CacheMap.remove(key);
         }
     }
- 
+
     public int size() {
         synchronized (CacheMap) {
             return CacheMap.size();
         }
     }
- 
+
     @SuppressWarnings("unchecked")
     public void cleanup() {
         long now = System.currentTimeMillis();
         ArrayList<K> deleteKey = null;
- 
+
         synchronized (CacheMap) {
             MapIterator itr = CacheMap.mapIterator();
             deleteKey = new ArrayList<K>((CacheMap.size() / 2) + 1);
             K key = null;
             CacheObject c = null;
- 
+
             while (itr.hasNext()) {
                 key = (K) itr.next();
                 c = (CacheObject) itr.getValue();
@@ -90,14 +93,14 @@ class InMemoryCache<K, T> {
                 }
             }
         }
- 
+
         for (K key : deleteKey) {
             synchronized (CacheMap) {
                 CacheMap.remove(key);
             }
             Thread.yield();
         }
-    }*/
+    }
 }
 
 public class InMemoryCacheTest {
@@ -119,7 +122,7 @@ public class InMemoryCacheTest {
         // Test with timeToLiveInSeconds = 200 seconds
         // timerIntervalInSeconds = 500 seconds
         // maxItems = 6
-        /*InMemoryCache<String, String> cache = new InMemoryCache<String, String>(200, 500, 6);
+        InMemoryCache<String, String> cache = new InMemoryCache<String, String>(200, 500, 6);
  
         cache.put("eBay", "eBay");
         cache.put("Paypal", "Paypal");
@@ -134,12 +137,11 @@ public class InMemoryCacheTest {
  
         cache.put("Twitter", "Twitter");
         cache.put("SAP", "SAP");
-        System.out.println("Two objects Added but reached maxItems.. cache.size(): " + cache.size());*/
+        System.out.println("Two objects Added but reached maxItems.. cache.size(): " + cache.size());
  
     }
  
     private void TestExpiredCacheObjects() throws InterruptedException {
- /*
         // Test with timeToLiveInSeconds = 1 second
         // timerIntervalInSeconds = 1 second
         // maxItems = 10
@@ -151,7 +153,7 @@ public class InMemoryCacheTest {
         // Cache because of timeToLiveInSeconds value
         Thread.sleep(3000);
  
-        System.out.println("Two objects are added but reached timeToLive. cache.size(): " + cache.size());*/
+        System.out.println("Two objects are added but reached timeToLive. cache.size(): " + cache.size());
  
     }
  
@@ -161,7 +163,6 @@ public class InMemoryCacheTest {
         // Test with timeToLiveInSeconds = 100 seconds
         // timerIntervalInSeconds = 100 seconds
         // maxItems = 500000
- /*
         InMemoryCache<String, String> cache = new InMemoryCache<String, String>(100, 100, 500000);
  
         for (int i = 0; i < size; i++) {
@@ -175,7 +176,7 @@ public class InMemoryCacheTest {
         cache.cleanup();
         double finish = (double) (System.currentTimeMillis() - start) / 1000.0;
  
-        System.out.println("Cleanup times for " + size + " objects are " + finish + " s");*/
+        System.out.println("Cleanup times for " + size + " objects are " + finish + " s");
  
     }
 }

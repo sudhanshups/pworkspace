@@ -21,6 +21,7 @@ public class SolveSudoku {
         } else {
             System.out.println("No solution");
         }
+
     }
 
     static boolean solveSudoku(int[][] board) {

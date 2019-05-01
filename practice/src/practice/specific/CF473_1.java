@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -134,14 +133,153 @@ public class CF473_1 {
 /*        String str = "forgeeksskeegfor";
         System.out.println("Length is: " + longestPalSubstr(str));*/
 
-        System.out.println(isPowerOf2("20") + "\n" + isPowerOf2("124684622466842024680246842024662202000002") + "\n"
-                + isPowerOf2("1") + "\n" + isPowerOf2("128") + "\n");
+//        System.out.println(isPowerOf2("20") + "\n" + isPowerOf2("124684622466842024680246842024662202000002") + "\n"
+//                + isPowerOf2("1") + "\n" + isPowerOf2("128") + "\n");
 
+        /*ArrayList<Integer> arr1 = new ArrayList<>(Arrays.asList(1, 1));
+        ArrayList<Integer> arr2 = new ArrayList<>(Arrays.asList(1, 1));
+        System.out.println(maxNSum(arr1, arr2));*/
+
+/*        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(1, 2, 1, 3, 4, 3));
+        System.out.print(DistinctInK(arr, 3));*/
+        //System.out.println(validIps("0100100"));
+
+    }
+
+
+    static ArrayList<String> validIps(String text) {
+        Set<String> res = new TreeSet<>();
+        if (text.length() < 4 || text.length() > 12)
+            return new ArrayList<>();
+        validip(text, 0, 0, "", res);
+
+        return new ArrayList<>(res);
+    }
+
+    static void validip(String text, int dotCount, int index, String ip, Set<String> ips) {
+        if (index >= text.length())
+            return;
+        if (dotCount == 3) {
+            String num = text.substring(index, text.length());
+
+            if (text.length() - index == 1) {
+                ip += "." + num;
+                ips.add(ip);
+                return;
+            } else if (text.length() - index == 2 && Integer.parseInt(num) > 9
+                    && Integer.parseInt(num) < 100) {
+                ip += "." + num;
+                ips.add(ip);
+            } else if (text.length() - index == 3 && Integer.parseInt(num) > 99
+                    && Integer.parseInt(num) <= 255) {
+                ip += "." + num;
+                ips.add(ip);
+            }
+            return;
+        }
+
+        String delim = "";
+        if (dotCount != 0)
+            delim = ".";
+
+        if (index + 1 > text.length())
+            return;
+        String num = text.substring(index, index + 1);
+        validip(text, dotCount + 1, index + 1, ip + delim + num, ips);
+
+        if (index + 2 > text.length())
+            return;
+
+        num = text.substring(index, index + 2);
+        if (Integer.parseInt(num) < 100 && Integer.parseInt(num) > 9) {
+            validip(text, dotCount + 1, index + 2, ip + delim + num, ips);
+        }
+
+        if (index + 3 > text.length())
+            return;
+
+        num = text.substring(index, index + 3);
+        if (Integer.parseInt(num) > 99 && Integer.parseInt(num) <= 255) {
+            validip(text, dotCount + 1, index + 3, ip + delim + num, ips);
+        }
+
+    }
+
+
+    static ArrayList<Integer> DistinctInK(ArrayList<Integer> arr, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        ArrayList<Integer> res = new ArrayList<>();
+        int d = 0;
+        for (int i = 0; i < k - 1; i++) {
+            if (!map.containsKey(arr.get(i))) {
+                d++;
+            }
+            map.put(arr.get(i), i);
+        }
+        for (int i = k - 1; i < arr.size(); i++) {
+            if ((i - k) >= 0 && (i - map.get(arr.get(i - k)) + 1) > k) {
+                d--;
+            }
+
+            if (!map.containsKey(arr.get(i)) || (i - map.get(arr.get(i)) >= k)) {
+                d++;
+            }
+            map.put(arr.get(i), i);
+            res.add(d);
+
+        }
+        return res;
+    }
+
+    static ArrayList<Integer> maxNSum(ArrayList<Integer> arr1, ArrayList<Integer> arr2) {
+        class Sum {
+            int sum, i, j;
+
+            Sum(int a, int b, int c) {
+                sum = a;
+                i = b;
+                j = c;
+            }
+        }
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        Collections.sort(arr1, Collections.reverseOrder());
+        Collections.sort(arr2, Collections.reverseOrder());
+        Queue<Sum> queue = new PriorityQueue<>((u, v) -> {
+            return v.sum - u.sum;
+        });
+
+        ArrayList<Integer> res = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        int n = arr1.size();
+        queue.add(new Sum(arr1.get(i) + arr2.get(j), i, j));
+        while (k < n) {
+            Sum S = queue.poll();
+            res.add(S.sum);
+            k++;
+            if (!map.containsKey(S.i)) {
+                map.put(S.i, new HashSet<>());
+            }
+            if ((S.i + 1) < n && !map.containsKey(S.i + 1)) {
+                map.put(S.i + 1, new HashSet<>());
+            }
+            if ((S.i + 1) < n && !map.get(S.i + 1).contains(S.j)) {
+                queue.add(new Sum(arr1.get(S.i + 1) + arr2.get(S.j), S.i + 1, S.j));
+                map.get(S.i + 1).add(S.j);
+            }
+            if ((S.j + 1) < n && !map.get(S.i).contains(S.j + 1)) {
+                queue.add(new Sum(arr1.get(S.i) + arr2.get(S.j + 1), S.i, S.j + 1));
+                map.get(S.i).add(S.j + 1);
+            }
+        }
+
+        return res;
     }
 
     static boolean isPowerOf2(String A) {
 
-        if(A.length() == 1 && A.charAt(A.length() - 1) == '1'){
+        if (A.length() == 1 && A.charAt(A.length() - 1) == '1') {
             return true;
         }
 

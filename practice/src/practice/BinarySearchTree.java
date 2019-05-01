@@ -1,6 +1,6 @@
 package practice;
 
-import java.util.Stack;
+import java.util.*;
 
 
 public class BinarySearchTree {
@@ -176,6 +176,44 @@ public class BinarySearchTree {
         return -1;
     }
 
+
+    class Index {
+        int i;
+    }
+
+    private void replaceNodeInorder(Node root, List<Integer> nodes, Index index) {
+        if (root == null)
+            return;
+        if (root.l != null) {
+            replaceNodeInorder(root.l, nodes, index);
+        }
+        root.data = nodes.get(index.i);
+        index.i++;
+        if (root.r != null) {
+            replaceNodeInorder(root.r, nodes, index);
+        }
+    }
+
+    Node binaryTreeToBinarySearchTree(Node root) {
+        List<Integer> values = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Node temp = queue.poll();
+            values.add(temp.data);
+            if (temp.l != null) queue.add(temp.l);
+            if (temp.r != null) queue.add(temp.r);
+        }
+
+        // do inorder and set
+        Collections.sort(values);
+        Index index = new Index();
+        index.i = 0;
+        replaceNodeInorder(root, values, index);
+
+        return null;
+    }
+
     public static void main(String args[]) {
         BinarySearchTree bst = new BinarySearchTree();
         int in;
@@ -209,5 +247,24 @@ public class BinarySearchTree {
         // System.out.println("Binary Tree Lowest Common ancestor of 2 ,4 is " + bst.lCABTree(2, 4));
         System.out.println("3 distance nodes ");
         bst.printkdistanceNode(bst.root, 1, 2);
+
+
+        System.out.println("===== binary tree to binary search tree ===");
+        System.out.println("          10\n" +
+                "         /  \\\n" +
+                "        2    7\n" +
+                "       / \\\n" +
+                "      8   4");
+        bst = new BinarySearchTree();
+        bst.root = bst.new Node(10);
+        bst.root.l = bst.new Node(2);
+        bst.root.r = bst.new Node(7);
+        bst.root.l.l = bst.new Node(8);
+        bst.root.l.r = bst.new Node(4);
+        System.out.println("Old inorder");
+        bst.inOrder(bst.root);
+        bst.binaryTreeToBinarySearchTree(bst.root);
+        System.out.println("new inorder");
+        bst.inOrder(bst.root);
     }
 }
