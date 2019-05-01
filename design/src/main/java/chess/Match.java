@@ -1,9 +1,8 @@
 package chess;
 
+import chess.chessboard.ChessBoard;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-
-import chess.chessboard.ChessBoard;
 
 public class Match {
 	final static Logger logger = Logger.getLogger(Match.class);

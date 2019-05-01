@@ -1,7 +1,7 @@
 package chess.chessman;
 import chess.chessboard.Colour;
 
-public class Pawn extends Chessman{
+public class Pawn extends Chessman {
 
 	static final String name="Pawn";
 	static final char Symbol='P';

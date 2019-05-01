@@ -115,7 +115,7 @@ public class Cache {
 	int hit;
 	int miss;
 
-	Node []arr=new Node[]{
+	Node[]arr=new Node[]{
 			new Node(0, "zero"),
 			new Node(1, "one"),
 			new Node(2, "two"),
