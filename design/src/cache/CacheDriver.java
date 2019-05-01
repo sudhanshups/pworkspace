@@ -1,3 +1,4 @@
+package cache;
 
 public class CacheDriver {
 	public static void main(String args[]) {
@@ -25,12 +26,12 @@ public class CacheDriver {
 		c.displayCache();
 		
 /*		
-		DoublyLinkedList dll = new DoublyLinkedList();
-		Node []arr=new Node[]{
-				new Node(1, "one"),
-				new Node(2, "two"),
-				new Node(3, "three"),
-				new Node(4, "four")
+		cache.DoublyLinkedList dll = new cache.DoublyLinkedList();
+		cache.Node []arr=new cache.Node[]{
+				new cache.Node(1, "one"),
+				new cache.Node(2, "two"),
+				new cache.Node(3, "three"),
+				new cache.Node(4, "four")
 		};
 		dll.pushBack(arr[0]);
 		dll.pushBack(arr[1]);

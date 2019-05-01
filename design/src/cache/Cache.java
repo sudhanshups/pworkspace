@@ -1,3 +1,5 @@
+package cache;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ class Node {
 	}
 	@Override
 	public String toString() {
-		return "Node [key=" + key + ", value=" + value +"]";
+		return "cache.Node [key=" + key + ", value=" + value +"]";
 	}
 	
 }
@@ -93,7 +95,7 @@ class DoublyLinkedList {
 
 	void displayList() {
 		Node i = head;
-		System.out.println("--Cache Data---\nCurrent size =" + size);
+		System.out.println("--cache.Cache Data---\nCurrent size =" + size);
 		int j = 0;
 		while (i != null) {
 			System.out.println(i.key + " -> " + i.value);
@@ -102,7 +104,7 @@ class DoublyLinkedList {
 			if (j > 6)
 				break;
 		}
-		System.out.println("--Cache Data END ---");
+		System.out.println("--cache.Cache Data END ---");
 
 	}
 }
@@ -149,12 +151,12 @@ public class Cache {
 		Node n = map.get(key);
 		if (n != null) {
 		    hit++;
-			System.out.println("Cache Hit "+ n);
+			System.out.println("cache.Cache Hit "+ n);
 			update(n);
 		} else {
 			miss++;
 			insert(arr[key]);
-			System.out.println("Node Not Found. Inserted from DB " + map.get(key));
+			System.out.println("cache.Node Not Found. Inserted from DB " + map.get(key));
 		}
 		return n;
 	}

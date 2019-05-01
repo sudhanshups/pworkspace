@@ -1,6 +1,6 @@
-package chessman;
+package chess.chessman;
 
-import chessboard.Colour;
+import chess.chessboard.Colour;
 
 public abstract class Chessman {
 	private Colour colour;

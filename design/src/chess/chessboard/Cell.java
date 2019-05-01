@@ -1,6 +1,6 @@
-package chessboard;
+package chess.chessboard;
 
-import chessman.Chessman;
+import chess.chessman.Chessman;
 
 public class Cell {
 
@@ -17,7 +17,7 @@ public class Cell {
 
 	@Override
 	public String toString() {
-		return "Cell [color=" + colour + ", position=" + position + ", chessman=" + chessman + "]";
+		return "Cell [color=" + colour + ", position=" + position + ", chess.chessman=" + chessman + "]";
 	}
 
 	void draw() {
@@ -72,7 +72,7 @@ public class Cell {
 	}
 
 	/**
-	 * @return the chessman
+	 * @return the chess.chessman
 	 */
 	public Chessman getChessman() {
 		return chessman;
@@ -80,7 +80,7 @@ public class Cell {
 
 	/**
 	 * @param chessman
-	 *            the chessman to set
+	 *            the chess.chessman to set
 	 */
 	public void setChessman(Chessman chessman) {
 		this.chessman = chessman;

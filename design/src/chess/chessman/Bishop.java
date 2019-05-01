@@ -1,5 +1,5 @@
-package chessman;
-import chessboard.Colour;
+package chess.chessman;
+import chess.chessboard.Colour;
 
 public class Bishop extends Chessman{
 
