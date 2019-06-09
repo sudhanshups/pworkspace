@@ -4,9 +4,37 @@ import java.util.*;
 
 public class FindSpecialChar {
 
+    public static void main(String args[]) throws Exception {
+
+        Scanner in = new Scanner(System.in);
+
+        Set<Character> CustomException = new HashSet<>();
+        CustomException.addAll(new ArrayList<>(Arrays.asList()));
+
+        List<String> input = new ArrayList<>();
+
+        for (int lineNo = 0; lineNo < 3; lineNo++) {
+            //TODO TAKE AS INPUT
+            String line = in.nextLine();
+            input.add(line);
+        }
+
+        List<String> specialCharDetails = findSpecialCharacters(input, true,
+                false, false, false,
+                false, CustomException);
+        if (specialCharDetails.size() == 0) {
+            System.out.println("No special Character");
+        } else {
+            System.out.println("Special Character at ");
+            System.out.println(specialCharDetails);
+        }
+    }
+
     public static final int CHARSET = 128;
 
-    public static void main(String args[]) throws Exception {
+    static List<String> findSpecialCharacters(List<String> input, boolean csvExceptionsSet, boolean textExceptions1Set,
+                                              boolean mathExceptions1Set, boolean mathExceptions2Set, boolean customExceptionSet,
+                                              Set<Character> CustomException) {
 
         boolean charSet[] = new boolean[CHARSET];
 
@@ -16,15 +44,12 @@ public class FindSpecialChar {
         Set<Character> MathException2 = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
 
 
-        Set<Character> CustomException = new HashSet<>();
-        CustomException.addAll(new ArrayList<>(Arrays.asList()));
-
         //TODO take as input
-        boolean csvExceptionsSet = true;
+        /*boolean csvExceptionsSet = true;
         boolean textExceptions1Set = false;
         boolean mathExceptions1Set = false;
         boolean mathExceptions2Set = false;
-        boolean customExceptionSet = false;
+        boolean customExceptionSet = false;*/
 
 
         for (int i = 0; i < CHARSET; i++) {
@@ -51,17 +76,15 @@ public class FindSpecialChar {
         }*/
 
 
-        Scanner in = new Scanner(System.in);
-
         List<String> specialCharDetails = new ArrayList<>();
         String beginning = "Beginning of the line %d";
         String afterWord = "After text %s at line %d";
 
-        for (int lineNo = 0; lineNo < 3; lineNo++) {
+        for (int lineNo = 0; lineNo < input.size(); lineNo++) {
             int OuputlineNo = lineNo + 1;
 
             //TODO TAKE AS INPUT
-            String line = in.nextLine();
+            String line = input.get(lineNo);
 
             boolean beginningOfTheLine = true;
             String pre = "";
@@ -88,13 +111,7 @@ public class FindSpecialChar {
                 }
             }
         }
-
-        if (specialCharDetails.size() == 0) {
-            System.out.println("No special Character");
-        } else {
-            System.out.println("Special Character at ");
-            System.out.println(specialCharDetails);
-        }
+        return specialCharDetails;
     }
 
     /*
