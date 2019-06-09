@@ -1,4 +1,4 @@
-package practice.specific;
+package practice.ibit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -936,46 +936,6 @@ public class CF473_1 {
         return new ArrayList(Arrays.asList(findFirst(a, 0, a.size() - 1, b),
                 findLast(a, 0, a.size() - 1, b)));
     }
-
-    public static int PainterPartition(int painter, int timePerUnit, ArrayList<Integer> partitions) {
-        // initialize table
-        int mod = 10000003;
-        int n = partitions.size();
-        int dp[][] = new int[painter + 1][n + 1];
-
-        int sum[] = new int[n + 1];//{0};
-
-        // sum from 1 to i elements of arr
-        for (int i = 1; i <= n; i++)
-            sum[i] = (int) ((sum[i - 1]) + (partitions.get(i - 1) * 1l * timePerUnit) % mod) % mod;
-
-        //k=1
-        for (int i = 1; i <= n; i++)
-            dp[1][i] = sum[i];
-
-        // n=1
-        for (int i = 1; i <= painter; i++)
-            dp[i][1] = (int) (partitions.get(0) * 1l * timePerUnit) % mod;
-
-        // 2 to k partitions
-        for (int i = 2; i <= painter; i++) { // 2 to n boards
-            for (int j = 2; j <= n; j++) {
-
-                // track minimum
-                int best = Integer.MAX_VALUE;
-
-                // i-1 th separator before position arr[p=1..j]
-                for (int p = 1; p <= j; p++)
-                    best = Math.min(best, Math.max(dp[i - 1][p],
-                            sum[j] - sum[p]));
-
-                dp[i][j] = best % mod;
-            }
-        }
-
-        return dp[painter][n];
-    }
-
 
     public static int findFloor(final List<Integer> A, int start, int end, int n, int u) {
         int mid = (start + end) / 2;

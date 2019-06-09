@@ -1,12 +1,14 @@
 *.DS_Store
 .idea
-.gradle
 *.rdb
 build/*
 out
-.metadata/*
 *.prefs
 .recommenders/*
 *.class
 *.jar
 */target/*
+
+
+d.gradle
+e.metadata/*
