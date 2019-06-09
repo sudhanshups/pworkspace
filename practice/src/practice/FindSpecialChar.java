@@ -10,17 +10,11 @@ public class FindSpecialChar {
 
         boolean charSet[] = new boolean[CHARSET];
 
-        Set<Character> csvException = new HashSet<>();
-        csvException.addAll(new ArrayList<>(Arrays.asList(',', ' ', '\n', '\r')));
+        Set<Character> csvException = new HashSet<>(Arrays.asList(',', ' ', '\n', '\r'));
+        Set<Character> TextException1 = new HashSet<>(Arrays.asList('!', '"', '#', '$', '%', '&', '|', '\'', '.', '\\', ':', ';', '?', '@', '_', '`', '~', '^'));
+        Set<Character> MathException1 = new HashSet<>(Arrays.asList('(', ')', '*', '+', '-', '/', '<', '=', '>', '[', ']', '{', '}'));
+        Set<Character> MathException2 = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
 
-        Set<Character> TextException1 = new HashSet<>();
-        TextException1.addAll(new ArrayList<>(Arrays.asList('!', '"', '#', '$', '%', '&', '|', '\'', '.', '\\', ':', ';', '?', '@', '_', '`', '~', '^')));
-
-        Set<Character> MathException1 = new HashSet<>();
-        MathException1.addAll(new ArrayList<>(Arrays.asList('(', ')', '*', '+', '-', '/', '<', '=', '>', '[', ']', '{', '}')));
-
-        Set<Character> MathException2 = new HashSet<>();
-        MathException1.addAll(new ArrayList<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')));
 
         Set<Character> CustomException = new HashSet<>();
         CustomException.addAll(new ArrayList<>(Arrays.asList()));
