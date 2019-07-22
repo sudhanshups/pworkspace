@@ -42,7 +42,7 @@ public class LC140_5083 {
                 getAllPermutation(res, s.toString(), 0);
             }
         }
-
+        System.out.println(res);
         return res.size();
     }
 
@@ -73,7 +73,7 @@ public class LC140_5083 {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         //int t = Integer.parseInt(in.readLine());
         LC140_5083 lc140_5083 = new LC140_5083();
-        System.out.println(lc140_5083.numTilePossibilities("AAABBC"));
+        System.out.println(lc140_5083.numTilePossibilities("ABB"));
 
         //        System.out.println(lc140_5083.findOcurrences("alice is a good girl she is a good student", "a", "good"));
 

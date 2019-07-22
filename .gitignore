@@ -10,5 +10,6 @@ out
 */target/*
 
 
-d.gradle
-e.metadata/*
+.gradle/
+.metadata/*
+/.metadata/
