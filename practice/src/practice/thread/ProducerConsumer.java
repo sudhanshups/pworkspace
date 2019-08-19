@@ -5,7 +5,7 @@ package practice.thread;
 
 import java.util.Scanner;
 
-public class threadexample {
+public class ProducerConsumer {
     public static void main(String[] args)
             throws InterruptedException {
         final PC pc = new PC();

@@ -80,6 +80,7 @@ public class FactoryPatternTest {
 		CrunchfiyCompany eBay = CrunchifyFactoryPattern.getDetails("Ebay", "408.123.4567", "98765");
 		CrunchfiyCompany google = CrunchifyFactoryPattern.getDetails("Google", "519.123.4567", "56789");
 		System.out.println("Factory eBay Config::" + eBay);
+
 		System.out.println("Factory Google Config::" + google);
 	}
 }

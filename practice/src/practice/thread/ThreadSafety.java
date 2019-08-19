@@ -1,4 +1,4 @@
-package practice;
+package practice.thread;
 
 public class ThreadSafety {
 
@@ -10,6 +10,7 @@ public class ThreadSafety {
         Thread t2 = new Thread(pt, "t2");
         t2.start();
         //wait for threads to finish processing
+        //join() : When the join() method is called, the current thread will simply wait until the thread it is joining with is no longer alive.
         t1.join();
         t2.join();
         System.out.println("Processing count="+pt.getCount());

@@ -85,12 +85,181 @@ public class InterviewbitHashing {
     /*    System.out.println(ibit.minWindow("xiEjBOGeHIMIlslpQIZ6jERaAVoHUc9Hrjlv7pQpUSY8oHqXoQYWWll8Pumov89wXDe0Qx6bEjsNJQAQ0A6K21Z0BrmM96FWEdRG69M9CYtdBOrDjzVGPf83UdP3kc4gK0uHVKcPN4HPdccm9Qd2VfmmOwYCYeva6BSG6NGqTt1aQw9BbkNsgAjvYzkVJPOYCnz7U4hBeGpcJkrnlTgNIGnluj6L6zPqKo5Ui75tC0jMojhEAlyFqDs7WMCG3dmSyVoan5tXI5uq1IxhAYZvRQVHtuHae0xxwCbRh6S7fCLKfXeSFITfKHnLdT65K36vGC7qOEyyT0Sm3Gwl2iXYSN2ELIoITfGW888GXaUNebAr3fnkuR6VwjcsPTldQSiohMkkps0MH1cBedtaKNoFm5HbH15kKok6aYEVsb6wOH2w096OwEyvtDBTQwoLN87JriLwgCBBavbOAiLwkGGySk8nO8dLHuUhk9q7f0rIjXCsQeAZ1dfFHvVLupPYekXzxtWHd84dARvv4Z5L1Z6j8ur2IXWWbum8lCi7aErEcq41WTo8dRlRykyLRSQxVH70rUTz81oJS3OuZwpI1ifBAmNXoTfznG2MXkLtFu4SMYC0bPHNctW7g5kZRwjSBKnGihTY6BQYItRwLUINApd1qZ8W4yVG9tnjx4WyKcDhK7Ieih7yNl68Qb4nXoQl079Vza3SZoKeWphKef1PedfQ6Hw2rv3DpfmtSkulxpSkd9ee8uTyTvyFlh9G1Xh8tNF8viKgsiuCZgLKva32fNfkvW7TJC654Wmz7tPMIske3RXgBdpPJd5BPpMpPGymdfIw53hnYBNg8NdWAImY3otYHjbl1rqiNQSHVPMbDDvDpwy01sKpEkcZ7R4SLCazPClvrx5oDyYolubdYKcvqtlcyks3UWm2z7kh4SHeiCPKerh83bX0m5xevbTqM2cXC9WxJLrS8q7XF1nh",
                 "dO4BRDaT1wd0YBhH88Afu7CI4fwAyXM8pGoGNsO1n8MFMRB7qugS9EPhCauVzj7h"));*/
 
-        System.out.println(ibit.fraction(-1, -2147483648));
+        //System.out.println(ibit.fraction(-1, -2147483648));
+
+       /* ArrayList<Integer> x = new ArrayList<>(Arrays.asList(0, 0, 0, 4));
+        ArrayList<Integer> y = new ArrayList<>(Arrays.asList(0, 1, 2, 2));
+        System.out.println(ibit.maxPoints(x, y));*/
+
+        ArrayList<String> words = new ArrayList<>(Arrays.asList("foo", "bar"));
+        System.out.println(ibit.findSubstringIndices("barfoothefoobarman", words));
 
     }
 
+    public ArrayList<Integer> findSubstringIndices(String S, ArrayList<String> words) {
+        ArrayList<Integer> res = new ArrayList<>();
+
+        Map<String, Integer> wordCount = new HashMap<>();
+        for (String s : words) {
+            if (!wordCount.containsKey(s)) {
+                wordCount.put(s, 0);
+            }
+            wordCount.put(s, wordCount.get(s) + 1);
+        }
+        int wordSize = words.get(0).length();
+        int matchStringLength = wordSize * words.size();
+
+        for (int i = 0; i <= S.length() - matchStringLength; i++) {
+            Map<String, Integer> requiredWordCount = new HashMap<>(wordCount);
+            boolean found = true;
+
+            for (int j = i; j < i + matchStringLength; j = j + wordSize) {
+                String currentWord = S.substring(j, j + wordSize);
+                if (!requiredWordCount.containsKey(currentWord)) {
+                    found = false;
+                    break;
+                } else {
+                    requiredWordCount.put(currentWord, requiredWordCount.get(currentWord) - 1);
+                }
+            }
+
+            if (found) {
+                for (Integer val : requiredWordCount.values()) {
+                    if (val != 0) {
+                        found = false;
+                        break;
+                    }
+                }
+            }
+            if (found) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    public int maxPoints(ArrayList<Integer> a, ArrayList<Integer> b) {
+        int maxPoints = 0;
+        if (a.size() <= 2) {
+            return a.size();
+        }
+
+        Map<Double, Integer> map = new HashMap<>();
+        for (int i = 0; i < a.size(); i++) {
+            int duplicate = 1;
+            int vertical = 0;
+            int x1 = a.get(i);
+            int y1 = b.get(i);
+            for (int j = i + 1; j < a.size(); j++) {
+                int x2 = a.get(j);
+                int y2 = b.get(j);
+
+                if (x1 == x2) {
+                    if (y1 == y2) {
+                        duplicate++;
+                    } else {
+                        vertical++;
+                    }
+                } else {
+                    double slope;
+                    if (y2 - y1 == 0)
+                        slope = 0.0;
+                    else
+                        slope = (double) (y2 - y1) / (double) (x2 - x1);
+
+                    if (map.containsKey(slope)) {
+                        map.put(slope, map.get(slope) + 1);
+                    } else {
+                        map.put(slope, 1);
+                    }
+                }
+            }
+
+            for (int sl : map.values()) {
+                if (maxPoints < sl + duplicate)
+                    maxPoints = sl + duplicate;
+            }
+
+            maxPoints = Math.max(vertical + duplicate, maxPoints);
+            map.clear();
+        }
+
+        return maxPoints;
+    }
+
+/*
+string Solution::fractionToDecimal(int numerator, int denominator) {
+    string sol = "";
+
+    long long int num = numerator;
+    long long int den = denominator;
+
+    bool neg = false;
+
+    if(num < 0){
+        neg = true;
+        num = 0 - num;
+    }
+    if(den < 0){
+        if(neg){
+            neg = false;
+        }
+        else{
+            neg = true;
+        }
+        den = 0 - den;
+    }
+
+    unordered_map<int, int> myMap;
+
+    long long int initial = num/den;
+
+    if(num == 0){
+        return "0";
+    }
+
+    if(neg){
+        sol = sol + "-";
+    }
+
+    sol = sol + to_string(initial);
+
+    num = num%den;
+
+    if(num == 0){
+        return sol;
+    }
+
+    sol = sol + ".";
+
+    bool repeat = false;
+    int val;
+    while(num != 0 && repeat == false){
+        num = num*10;
+        if(myMap.find(num) != myMap.end()){
+            repeat = true;
+            val = myMap[num];
+            break;
+        }
+        else{
+            myMap.insert({num, sol.size()});
+        }
+        int temp = num/den;
+        sol = sol + to_string(temp);
+        num = num%den;
+    }
+
+    if(repeat){
+        sol = sol + ")";
+        sol.insert(val, "(");
+    }
+
+    return sol;
+}
+ */
+
     public String fraction(int A, int B) {
-        boolean isNeg = (A <= 0 && B > 0) || (A >= 0 && B < 0) ? true : false;
+        boolean isNeg = (A < 0 && B >= 0) || (A >= 0 && B < 0);
         long a = Math.abs(A * 1l);
         long b = Math.abs(B * 1l);
 
@@ -114,7 +283,6 @@ public class InterviewbitHashing {
         }
         long d = 0;
         Set<String> set = new HashSet<>();
-
 
         while (a < b) {
             a = a * 10;

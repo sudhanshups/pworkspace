@@ -1,5 +1,7 @@
 package practice.ibit;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,9 +26,9 @@ public class InterviewbitTree {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         InterviewbitTree ibit = new InterviewbitTree();
 
-        TreeNode root = new TreeNode(6);
-        root.left = new TreeNode(4);
-        root.left.left = new TreeNode(4);
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(3);
 //        root.right = new TreeNode(4);
         //root.right.left = new TreeNode(9);
 //        root.right.right = new TreeNode(5);
@@ -52,7 +54,454 @@ public class InterviewbitTree {
 //        System.out.println(ibit.isBalanced(root));
 //        System.out.println(ibit.invertTree(root));//mirror
 //        System.out.println(ibit.kthsmallest(root, 3));
-        System.out.println(ibit.solve("cool_ice_wifi", new ArrayList<>(Arrays.asList("water_is_cool", "cold_ice_drink", "cool_wifi_speed"))));
+//        System.out.println(ibit.solve("cool_ice_wifi", new ArrayList<>(Arrays.asList("water_is_cool", "cold_ice_drink", "cool_wifi_speed"))));
+//        System.out.println(ibit.buildTree(new ArrayList<>(Arrays.asList(5,10,40,30,28)))); // Given an inorder traversal of a cartesian tree, construct the tree.
+//        System.out.println(ibit.sortedArrayToBST(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5))));
+//        System.out.println(ibit.TreefromInPost(new ArrayList<>(Arrays.asList(2, 3, 4, 1, 5)), new ArrayList<>(Arrays.asList(3, 2, 5, 1, 4))));
+//        System.out.println(ibit.TreefromInPre(new ArrayList<>(Arrays.asList(2, 3, 4, 1, 5)), new ArrayList<>(Arrays.asList(4, 2, 3, 1, 5))));
+//        System.out.println(ibit.recoverTree(root));
+
+        /*TreeLinkNode root1 = new TreeLinkNode(1);
+        root1.left = new TreeLinkNode(2);
+        root1.left.left = new TreeLinkNode(3);
+        ibit.connect(root1);
+        System.out.println(ibit.recoverTree(root));*/
+
+//        System.out.println(ibit.prefix(new ArrayList<>(Arrays.asList("zebra", "dog", "duck", "dove"))));
+
+//        System.out.println(ibit.lca(root, 1, 2));
+        /*TreeNode result = ibit.flatenBTToLinkList(root);
+        System.out.println(result);*/
+
+        ibit.arrange(new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 2)), new ArrayList<>(Arrays.asList(0, 1, 2, 0, 3, 2)));
+
+    }
+
+    // people heights
+    public void arrange(ArrayList<Integer> A, ArrayList<Integer> B) {//height,frontcount
+
+        Integer[] heights = A.toArray(new Integer[A.size()]);
+        Integer[] frontCounts = B.toArray(new Integer[B.size()]);
+        Person[] persons = new Person[heights.length];
+
+        for (int i = 0; i < persons.length; i++)
+            persons[i] = new Person(heights[i], frontCounts[i]);
+
+        Arrays.sort(persons, (p1, p2) -> Integer.compare(p2.height, p1.height));
+
+        Node root = new Node(persons[0]);
+
+        for (int i = 1; i < persons.length; i++) {
+            insert(root, persons[i]);
+        }
+        ArrayList<Integer> result = new ArrayList<>();
+        inOrder(root, result);
+    }
+
+
+    private void insert(Node root, Person p) {
+        insert(root, p, p.frontCount);
+    }
+
+    private void insert(Node root, Person p, int value) {
+        if (value < root.value) { // should insert to the left
+            if (root.left == null) {
+                root.left = new Node(p);
+            } else {
+                insert(root.left, p, value);
+            }
+            root.value++; // Increase the current node value while descending left!
+        } else { // insert to the right
+            if (root.right == null) {
+                root.right = new Node(p);
+            } else {
+                insert(root.right, p, value - root.value);
+            }
+        }
+    }
+
+    private void inOrder(Node root, ArrayList<Integer> result) {
+        if (root == null)
+            return;
+
+        inOrder(root.left, result);
+        result.add(root.person.height);
+        inOrder(root.right, result);
+    }
+
+    static class Node {
+        Node left, right;
+        int value;
+        public final Person person;
+
+        public Node(Person person) {
+            this.value = 1;
+            this.person = person;
+        }
+    }
+
+    static class Person {
+        public final int height;
+        public final int frontCount;
+
+        Person(int height, int frontCount) {
+            this.height = height;
+            this.frontCount = frontCount;
+        }
+    }
+    //===//
+
+    public TreeNode flatenBTToLinkList(TreeNode A) {
+        if (A == null) {
+            return null;
+        }
+        flatenBTToLinkList(A.left);
+        flatenBTToLinkList(A.right);
+        if (A.left != null) {
+            TreeNode leftLastNode = A.left;
+            while (leftLastNode.right != null) {
+                leftLastNode = leftLastNode.right;
+            }
+            TreeNode temp = A.right;
+            A.right = A.left;
+            leftLastNode.right = temp;
+            A.left = null;
+        }
+
+        return A;
+    }
+
+
+    //lca in BST
+    public int lca(TreeNode A, int B, int C) {
+        List<Integer> path1 = new ArrayList<>();
+        List<Integer> path2 = new ArrayList<>();
+        if (!findPath(A, path1, B) || !findPath(A, path2, C)) {
+            return -1;
+        }
+
+        int i;
+        for (i = 0; i < Math.min(path1.size(), path2.size()); i++) {
+            if (!path1.get(i).equals(path2.get(i))) {
+                break;
+            }
+        }
+        return path1.get(i - 1);
+
+    }
+
+    private boolean findPath(TreeNode A, List<Integer> path1, int data) {
+        if (A == null) {
+            return false;
+        }
+        path1.add(A.val);
+        if (A.val == data) {
+            return true;
+        }
+        if (A.left != null && findPath(A.left, path1, data)) {
+            return true;
+        }
+
+        if (A.right != null && findPath(A.right, path1, data)) {
+            return true;
+        }
+        path1.remove(path1.size() - 1);
+        return false;
+    }
+
+    // shortest unique prefix
+    public ArrayList<String> prefix(ArrayList<String> A) {
+        ArrayList<String> result = new ArrayList<>();
+        if (A == null) {
+            return result;
+        } else if (A.size() == 1) {
+            result.add(new String(A.get(0).charAt(0) + ""));
+            return result;
+        }
+
+        Map<String, Integer> hm = new HashMap<>();
+        //A.stream().collect(Collectors.toMap(u->u,  i + 1));
+        int k = 0;
+        for (String s : A) {
+            hm.put(s, k++);
+            result.add(null);
+        }
+
+        A.sort(String::compareTo);
+
+        int j = 0;
+        while (j < Math.min(A.get(0).length(), A.get(1).length())) {
+            if (A.get(0).charAt(j) == A.get(1).charAt(j))
+                j++;
+            else
+                break;
+        }
+
+        result.set(hm.get(A.get(0)), A.get(0).substring(0, j + 1));
+
+        /* Store the unique prefix of a[1] from its left neighbor */
+        String temp_prefix = A.get(1).substring(0, j + 1);
+        for (int i = 1; i < A.size() - 1; i++) {
+
+            j = 0;
+            while (j < Math.min(A.get(i).length(), A.get(i + 1).length())) {
+                if (A.get(i).charAt(j) == A.get(i + 1).charAt(j))
+                    j++;
+                else
+                    break;
+            }
+            String new_prefix = A.get(i).substring(0, j + 1);
+            if (temp_prefix.length() > new_prefix.length())
+                result.set(hm.get(A.get(i)), temp_prefix);
+            else
+                result.set(hm.get(A.get(i)), new_prefix);
+
+            temp_prefix = A.get(i + 1).substring(0, j + 1);
+        }
+
+        j = 0;
+        String sec_last = A.get(A.size() - 2);
+        String last = A.get(A.size() - 1);
+
+        while (j < Math.min(sec_last.length(), last.length())) {
+            if (sec_last.charAt(j) == last.charAt(j))
+                j++;
+            else
+                break;
+        }
+
+        result.set(hm.get(last), last.substring(0, j + 1));
+        return result;
+
+    }
+
+
+    //==
+    static class TreeLinkNode {
+        int val;
+        TreeLinkNode left;
+        TreeLinkNode right;
+        TreeLinkNode next;
+
+        TreeLinkNode(int a) {
+            val = a;
+        }
+    }
+
+    //connect next right
+    public void connect(TreeLinkNode root) {
+        TreeLinkNode temp = null;
+        if (root == null)
+            return;
+        root.next = null;
+
+        while (root != null) {
+            TreeLinkNode q = root;
+            while (q != null) {
+                if (q.left != null) {
+                    if (q.right != null)
+                        q.left.next = q.right;
+                    else
+                        q.left.next = getNextRightForChildOf(q);
+                }
+
+                if (q.right != null)
+                    q.right.next = getNextRightForChildOf(q);
+                q = q.next;
+            }
+
+            if (root.left != null)
+                root = root.left;
+            else if (root.right != null)
+                root = root.right;
+            else
+                root = getNextRightForChildOf(root);
+        }
+    }
+
+    TreeLinkNode getNextRightForChildOf(TreeLinkNode p) {
+        TreeLinkNode temp = p.next;
+
+        while (temp != null) {
+            if (temp.left != null)
+                return temp.left;
+            if (temp.right != null)
+                return temp.right;
+            temp = temp.next;
+        }
+        return null;
+    }
+    //==//
+
+
+    //===
+    class RecoverTree {
+        TreeNode prev, first, mid, last;
+    }
+
+    public ArrayList<Integer> recoverTree(TreeNode A) {// tree has 2 value swapped
+        if (A == null) {
+            return new ArrayList<>();
+        }
+
+        RecoverTree swNodes = new RecoverTree();
+        recoverTreeWhere2ValueSwapped(A, swNodes);
+
+        ArrayList<Integer> result = new ArrayList<>();
+        if (swNodes.last == null) {
+            result.add(swNodes.mid.val);
+            result.add(swNodes.first.val);
+        } else {
+            result.add(swNodes.last.val);
+            result.add(swNodes.first.val);
+        }
+        return result;
+    }
+
+    private void recoverTreeWhere2ValueSwapped(TreeNode root, RecoverTree swNodes) {
+        if (root == null) {
+            return;
+        }
+        recoverTreeWhere2ValueSwapped(root.left, swNodes);
+        if (swNodes.prev != null && swNodes.prev.val > root.val) {
+            if (swNodes.first == null) {
+                swNodes.first = swNodes.prev;
+                swNodes.mid = root;
+            } else {
+                swNodes.last = root;
+            }
+        }
+        swNodes.prev = root;
+        recoverTreeWhere2ValueSwapped(root.right, swNodes);
+    }
+    //===//
+
+
+    class PIndex {
+        int index;
+    }
+
+    public TreeNode TreefromInPre(final List<Integer> inOrder, final List<Integer> preOrder) {
+        if (inOrder == null) {
+            return null;
+        }
+        Map<Integer, Integer> dataToIndexMap = new HashMap<>();
+        for (int i = 0; i < inOrder.size(); i++) {
+            dataToIndexMap.put(inOrder.get(i), i);
+        }
+
+        PIndex pIndex = new PIndex();
+        pIndex.index = 0;
+
+        TreeNode root = buildTreeFromInOrderAndPreOrder(0, inOrder.size() - 1, preOrder, pIndex, dataToIndexMap);
+        return root;
+    }
+
+    private TreeNode buildTreeFromInOrderAndPreOrder(int start, int end, final List<Integer> preOrder, PIndex pIndex,
+                                                     Map<Integer, Integer> dataToIndexMap) {
+        if (start > end) {
+            return null;
+        }
+
+        TreeNode node = new TreeNode(preOrder.get(pIndex.index));
+        int nodeInorderIndex = dataToIndexMap.get(preOrder.get(pIndex.index));
+        pIndex.index++;
+
+        node.left = buildTreeFromInOrderAndPreOrder(start, nodeInorderIndex - 1, preOrder, pIndex, dataToIndexMap);
+        node.right = buildTreeFromInOrderAndPreOrder(nodeInorderIndex + 1, end, preOrder, pIndex, dataToIndexMap);
+
+        return node;
+    }
+
+
+    public TreeNode TreefromInPost(final List<Integer> inOrder, final List<Integer> postOrder) {
+        if (inOrder == null) {
+            return null;
+        }
+        Map<Integer, Integer> dataToIndexMap = new HashMap<>();
+        for (int i = 0; i < inOrder.size(); i++) {
+            dataToIndexMap.put(inOrder.get(i), i);
+        }
+
+        PIndex pIndex = new PIndex();
+        pIndex.index = postOrder.size() - 1;
+
+        TreeNode root = buildTreeFromInOrderAndPostOrder(0, inOrder.size() - 1, postOrder, pIndex, dataToIndexMap);
+        return root;
+    }
+
+    private TreeNode buildTreeFromInOrderAndPostOrder(int start, int end, final List<Integer> postOrder, PIndex pIndex,
+                                                      Map<Integer, Integer> dataToIndexMap) {
+        if (start > end) {
+            return null;
+        }
+
+        TreeNode node = new TreeNode(postOrder.get(pIndex.index));
+        int nodeInorderIndex = dataToIndexMap.get(postOrder.get(pIndex.index));
+        pIndex.index--;
+
+        node.right = buildTreeFromInOrderAndPostOrder(nodeInorderIndex + 1, end, postOrder, pIndex, dataToIndexMap);
+        node.left = buildTreeFromInOrderAndPostOrder(start, nodeInorderIndex - 1, postOrder, pIndex, dataToIndexMap);
+        return node;
+    }
+
+
+    //=====
+    public TreeNode sortedArrayToBST(final List<Integer> a) {
+        if (a == null) {
+            return null;
+        }
+        TreeNode root = buildTreeFromSortedArray(a, 0, a.size() - 1);
+        return root;
+    }
+
+    private TreeNode buildTreeFromSortedArray(final List<Integer> a, int start, int end) {
+        if (start > end)
+            return null;
+
+        int mid = (start + end) / 2;
+        TreeNode node = new TreeNode(a.get(mid));
+        node.left = buildTreeFromSortedArray(a, start, mid - 1);
+        node.right = buildTreeFromSortedArray(a, mid + 1, end);
+        return node;
+    }
+    //=====//
+
+
+    // Given an inorder traversal of a cartesian tree, construct the tree.
+    public TreeNode buildTree(ArrayList<Integer> A) {
+        if (CollectionUtils.isEmpty(A)) {
+            return null;
+        }
+        TreeNode root = null;
+        root = buildCartesianTree(A, 0, A.size() - 1);
+        return root;
+    }
+
+    private TreeNode buildCartesianTree(ArrayList<Integer> inorder, int start, int end) {
+        if (start > end)
+            return null;
+
+        int i = max(inorder, start, end);
+        TreeNode node = new TreeNode(inorder.get(i));
+
+        if (start == end)
+            return node;
+
+        node.left = buildCartesianTree(inorder, start, i - 1);
+        node.right = buildCartesianTree(inorder, i + 1, end);
+        return node;
+    }
+
+    private int max(ArrayList<Integer> inorder, int start, int end) {
+        int i, max = inorder.get(start), maxind = start;
+        for (i = start + 1; i <= end; i++) {
+            if (inorder.get(i) > max) {
+                max = inorder.get(i);
+                maxind = i;
+            }
+        }
+        return maxind;
     }
 
 
@@ -75,18 +524,18 @@ public class InterviewbitTree {
                 if (goodWords.contains(word))
                     count++;
             }
-            reviewOrders.add(new ReviewOrder(i,count));
+            reviewOrders.add(new ReviewOrder(i, count));
         }
-        reviewOrders.sort((u,v)-> {
-            int goodness = -(u.count-v.count);
-            if(goodness == 0){
-                return u.index-v.index;
-            }else {
+        reviewOrders.sort((u, v) -> {
+            int goodness = -(u.count - v.count);
+            if (goodness == 0) {
+                return u.index - v.index;
+            } else {
                 return goodness;
             }
         });
 
-        ArrayList<Integer> result = new ArrayList<>(reviewOrders.stream().map(u->u.index).collect(Collectors.toList()));
+        ArrayList<Integer> result = new ArrayList<>(reviewOrders.stream().map(u -> u.index).collect(Collectors.toList()));
         return result;
     }
 

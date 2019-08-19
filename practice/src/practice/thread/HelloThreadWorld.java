@@ -8,7 +8,7 @@ class HelloThread extends Thread {
 
 class HelloRunnable implements Runnable {
     public void run() {
-        System.out.println("Hello from a thread!");
+        System.out.println("Hello from a thread using runnable!");
     }
 }
 
@@ -16,14 +16,14 @@ public class HelloThreadWorld {
 
     public static void main(String args[]) throws InterruptedException {
 
-        //using runnable- preferred
+        //using runnable- preferred as class can extend another class, yield() & interrupt() are not available in runnable
         (new Thread(new HelloRunnable())).start();
 
-        //using thread
+        //using thread, yield(), interrupt() are available
         (new HelloThread()).start();
 
 
-        //thread join & inturupt
+        // thread join & inturupt
         // Delay, in milliseconds before
         // we interrupt MessageLoop
         // thread (default one hour).
