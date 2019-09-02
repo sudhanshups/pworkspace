@@ -27,12 +27,135 @@ public class InterviewbitDP {
 
 //        System.out.println(ibit.NDigitNumbersWithDigitSumS(3, 4));
         //System.out.println(ibit.WaysToColor3xNBoard(10000));
-        ArrayList<String> a = new ArrayList<>(Arrays.asList("a","","c","d"));
-        System.out.println(a.hashCode());
-        a = new ArrayList<>(Arrays.asList("a","","","c","d"));
-        System.out.println( "".hashCode());
-        //3, 4
+        //System.out.println(ibit.shortestSuperstring(new String[]{"catg", "ctaagt", "gcta", "ttca", "atgcatc"}));
+
+        ArrayList<Integer> a = new ArrayList<>(Arrays.asList(1, 2, 4));
+        ArrayList<Integer> b = new ArrayList<>(Arrays.asList(4, 5, 8));
+        System.out.println(ibit.KthManhattanDistanceNeighbourhood(2, new ArrayList<>(Arrays.asList(a, b))));
+
     }
+
+
+    public ArrayList<ArrayList<Integer>> KthManhattanDistanceNeighbourhood(int A, ArrayList<ArrayList<Integer>> B) {
+        int n = B.size(), m = B.get(0).size(), min = Integer.MIN_VALUE;
+
+        int[][][] dp = new int[n][m][A + 1];
+        for (int k = 0; k <= A; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (k == 0) {
+                        dp[i][j][k] = B.get(i).get(j);
+                    } else {
+                        int cur = min;
+                        if (i > 0) cur = Math.max(cur, dp[i - 1][j][k - 1]);
+                        if (j > 0) cur = Math.max(cur, dp[i][j - 1][k - 1]);
+                        if (i < n - 1) cur = Math.max(cur, dp[i + 1][j][k - 1]);
+                        if (j < m - 1) cur = Math.max(cur, dp[i][j + 1][k - 1]);
+                        dp[i][j][k] = Math.max(cur, dp[i][j][k - 1]);
+                    }
+                }
+            }
+        }
+        ArrayList<ArrayList<Integer>> res= new ArrayList<>();
+        for (int i= 0; i< n; i++) {
+            ArrayList<Integer> c= new ArrayList<>();
+            for (int j= 0; j< m; j++) {
+                c.add (dp[i][j][A]);
+            }
+            res.add(c);
+        }
+        return res;
+    }
+
+    /*Time Complexity: O(N^2 (2^N + W)), where N is the number of words, and W is the maximum length of each word.
+    Space Complexity: O(N (2^N + W))*/
+    public String shortestSuperstring(String[] A) {
+        int N = A.length;
+
+        // Populate overlaps
+        int[][] overlaps = new int[N][N];
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                if (i != j) {
+                    int m = Math.min(A[i].length(), A[j].length());
+                    for (int k = m; k >= 0; --k)
+                        if (A[i].endsWith(A[j].substring(0, k))) {
+                            overlaps[i][j] = k;
+                            break;
+                        }
+                }
+
+        // dp[mask][i] = most overlap with mask, ending with ith element
+        int[][] dp = new int[1 << N][N];
+        int[][] parent = new int[1 << N][N];
+        for (int mask = 0; mask < (1 << N); ++mask) {
+            Arrays.fill(parent[mask], -1);
+
+            for (int bit = 0; bit < N; ++bit)
+                if (((mask >> bit) & 1) > 0) {
+                    // Let's try to find dp[mask][bit].  Previously, we had
+                    // a collection of items represented by pmask.
+                    int pmask = mask ^ (1 << bit);
+                    if (pmask == 0) continue;
+                    for (int i = 0; i < N; ++i)
+                        if (((pmask >> i) & 1) > 0) {
+                            // For each bit i in pmask, calculate the value
+                            // if we ended with word i, then added word 'bit'.
+                            int val = dp[pmask][i] + overlaps[i][bit];
+                            if (val > dp[mask][bit]) {
+                                dp[mask][bit] = val;
+                                parent[mask][bit] = i;
+                            }
+                        }
+                }
+        }
+
+        // # Answer will have length sum(len(A[i]) for i) - max(dp[-1])
+        // Reconstruct answer, first as a sequence 'perm' representing
+        // the indices of each word from left to right.
+
+        int[] perm = new int[N];
+        boolean[] seen = new boolean[N];
+        int t = 0;
+        int mask = (1 << N) - 1;
+
+        // p: the last element of perm (last word written left to right)
+        int p = 0;
+        for (int j = 0; j < N; ++j)
+            if (dp[(1 << N) - 1][j] > dp[(1 << N) - 1][p])
+                p = j;
+
+        // Follow parents down backwards path that retains maximum overlap
+        while (p != -1) {
+            perm[t++] = p;
+            seen[p] = true;
+            int p2 = parent[mask][p];
+            mask ^= 1 << p;
+            p = p2;
+        }
+
+        // Reverse perm
+        for (int i = 0; i < t / 2; ++i) {
+            int v = perm[i];
+            perm[i] = perm[t - 1 - i];
+            perm[t - 1 - i] = v;
+        }
+
+        // Fill in remaining words not yet added
+        for (int i = 0; i < N; ++i)
+            if (!seen[i])
+                perm[t++] = i;
+
+        // Reconstruct final answer given perm
+        StringBuilder ans = new StringBuilder(A[perm[0]]);
+        for (int i = 1; i < N; ++i) {
+            int overlap = overlaps[perm[i - 1]][perm[i]];
+            ans.append(A[perm[i]].substring(overlap));
+        }
+
+        return ans.toString();
+    }
+
 
     public static class Triplet {
         int a, b, c;
@@ -89,17 +212,17 @@ public class InterviewbitDP {
 
     public static int WaysToColor3xNBoard(int n) {
         /**Another approach You have to generate all the outcomes for n=1.
-        long color3=24;
-        long color2=12;
+         long color3=24;
+         long color2=12;
 
-        for(int i=2;i<=A;i++){
-            long temp=color3;
-            color3=(11*color3+10*color2)%1000000007;
-            color2=(5*temp+7*color2)%1000000007;
-        }
-        long ans=(color2+color3)%1000000007;
+         for(int i=2;i<=A;i++){
+         long temp=color3;
+         color3=(11*color3+10*color2)%1000000007;
+         color2=(5*temp+7*color2)%1000000007;
+         }
+         long ans=(color2+color3)%1000000007;
 
-        return (int)ans;
+         return (int)ans;
          */
         Map<Triplet, Integer>[] box = new HashMap[2];
         box[0] = new HashMap<>();
