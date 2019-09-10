@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
     <libelement value="file://C:/Users/ngoya2/Downloads/jackson-all-1.7.3.jar/jackson-all-1.7.3.jar" />
-    <libelement value="jar://$MODULE_DIR$/jackson-all-1.9.0.jar!/" />
+    <libelement value="file://jackson-all-1.9.0.jar" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
     </src_description>
@@ -27,7 +27,7 @@
     <orderEntry type="module-library">
       <library name="jackson-all-1.9.0.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jackson-all-1.9.0.jar!/" />
+          <root url="file://jackson-all-1.9.0.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

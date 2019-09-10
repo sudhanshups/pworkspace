@@ -3,19 +3,10 @@
   <component name="EclipseModuleManager">
     <libelement value="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/4.3.2.RELEASE/spring-beans-4.3.2.RELEASE.jar!/" />
     <libelement value="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/4.3.2.RELEASE/spring-context-4.3.2.RELEASE.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/../../jars/spring-core-5.0.1.RELEASE.jar!/" />
+    <libelement value="file://$MODULE_DIR$/../../../jars/spring-core-5.0.1.RELEASE.jar" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
     </src_description>
-  </component>
-  <component name="FacetManager">
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/applicationContext.xml</file>
-        </fileset>
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/bin" />
@@ -24,7 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="JavaSE-1.8" jdkType="JavaSDK" />
     <orderEntry type="module-library">
       <library name="spring-beans-4.3.2.RELEASE.jar">
         <CLASSES>
@@ -46,7 +37,7 @@
     <orderEntry type="module-library">
       <library name="spring-core-5.0.1.RELEASE.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../jars/spring-core-5.0.1.RELEASE.jar!/" />
+          <root url="file://$MODULE_DIR$/../../../jars/spring-core-5.0.1.RELEASE.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

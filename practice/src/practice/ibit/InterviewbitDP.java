@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InterviewbitDP {
 
@@ -29,10 +31,76 @@ public class InterviewbitDP {
         //System.out.println(ibit.WaysToColor3xNBoard(10000));
         //System.out.println(ibit.shortestSuperstring(new String[]{"catg", "ctaagt", "gcta", "ttca", "atgcatc"}));
 
-        ArrayList<Integer> a = new ArrayList<>(Arrays.asList(1, 2, 4));
-        ArrayList<Integer> b = new ArrayList<>(Arrays.asList(4, 5, 8));
-        System.out.println(ibit.KthManhattanDistanceNeighbourhood(2, new ArrayList<>(Arrays.asList(a, b))));
+//        ArrayList<Integer> a = new ArrayList<>(Arrays.asList(1, 2, 4));
+//        ArrayList<Integer> b = new ArrayList<>(Arrays.asList(4, 5, 8));
+//        System.out.println(ibit.KthManhattanDistanceNeighbourhood(2, new ArrayList<>(Arrays.asList(a, b))));
 
+//        System.out.println(ibit.CoinsInLine(new ArrayList<>(Arrays.asList(1, 2, 3, 4))));
+        System.out.println(ibit.countParenth("T&T|F"));
+        
+    }
+
+    int countParenth(String A) {
+        int mod = 1003;
+        int n = A.length() / 2 + 1;
+        char symb[] = new char[n];
+        char oper[] = new char[A.length() / 2];
+        int i = 0, j = 0;
+        for (i = 0; i < A.length(); i = i + 2) {
+            symb[j++] = A.charAt(i);
+        }
+        j = 0;
+        for (i = 1; i < A.length(); i = i + 2) {
+            oper[j++] = A.charAt(i);
+        }
+        int F[][] = new int[n][n];
+        int T[][] = new int[n][n];
+        for (i = 0; i < n; i++) {
+            F[i][i] = (symb[i] == 'F') ? 1 : 0;
+            T[i][i] = (symb[i] == 'T') ? 1 : 0;
+        }
+
+        for (int gap = 1; gap < n; ++gap) {
+            for (i = 0, j = gap; j < n; ++i, ++j) {
+                T[i][j] = F[i][j] = 0;
+                for (int k = i; k < gap + i; k++) {
+                    int tik = (T[i][k] + F[i][k]) % mod;  // Store Total[i][k] and Total[k+1][j]
+                    int tkj = (T[k + 1][j] + F[k + 1][j]) % mod;
+
+                    if (oper[k] == '&') {
+                        T[i][j] += (T[i][k] * T[k + 1][j]) % mod;
+                        F[i][j] += (tik * tkj - T[i][k] * T[k + 1][j]) % mod;
+                    }
+                    if (oper[k] == '|') {
+                        F[i][j] += (F[i][k] * F[k + 1][j]) % mod;
+                        T[i][j] += (tik * tkj - F[i][k] * F[k + 1][j]) % mod;
+                    }
+                    if (oper[k] == '^') {
+                        T[i][j] += (F[i][k] * T[k + 1][j] +
+                                T[i][k] * F[k + 1][j]) % mod;
+                        F[i][j] += (T[i][k] * T[k + 1][j] +
+                                F[i][k] * F[k + 1][j]) % mod;
+                    }
+                    T[i][j] = T[i][j] % mod;
+                    F[i][j] = F[i][j] % mod;
+                }
+            }
+        }
+        return T[0][n - 1];
+    }
+
+    int CoinsInLine(ArrayList<Integer> coins) {
+        int arr[][] = new int[coins.size()][coins.size()];
+        int x, y, z, n = coins.size();
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                x = ((i + 2) <= j) ? arr[i + 2][j] : 0;
+                y = ((i + 1) <= (j - 1)) ? arr[i + 1][j - 1] : 0;
+                z = (i <= (j - 2)) ? arr[i][j - 2] : 0;
+                arr[i][j] = Math.max(coins.get(i) + Math.min(x, y), coins.get(j) + Math.min(y, z));
+            }
+        }
+        return arr[0][n - 1];
     }
 
 
@@ -56,11 +124,11 @@ public class InterviewbitDP {
                 }
             }
         }
-        ArrayList<ArrayList<Integer>> res= new ArrayList<>();
-        for (int i= 0; i< n; i++) {
-            ArrayList<Integer> c= new ArrayList<>();
-            for (int j= 0; j< m; j++) {
-                c.add (dp[i][j][A]);
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            ArrayList<Integer> c = new ArrayList<>();
+            for (int j = 0; j < m; j++) {
+                c.add(dp[i][j][A]);
             }
             res.add(c);
         }
