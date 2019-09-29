@@ -82,38 +82,39 @@ class WGraph {
         dfsUtil(source, visited);
     }
 
-    class node {
-        int vertex;
-        int key;
-    }
 
     public void prims_mst() {
-        // Whether a vertex is in PriorityQueue or not
+        class Node {
+            int vertex;
+            int key;//edge weight
+        }
+        // Whether a vertex is in Set or not
         boolean[] mstset = new boolean[V];
-        node[] e = new node[V];
+        Node[] e = new Node[V];
 
         // Stores the parents of a vertex
         int[] parent = new int[V];
 
         for (int i = 0; i < V; i++)
-            e[i] = new node();
+            e[i] = new Node();
 
         for (int i = 0; i < V; i++) {
-            // Initialize to false
-            mstset[i] = false;
-            // Initialize key values to infinity
-            e[i].key = Integer.MAX_VALUE;
+            mstset[i] = false;// Initialize to false
+            e[i].key = Integer.MAX_VALUE; // Initialize key values to infinity
             e[i].vertex = i;
             parent[i] = -1;
         }
         // Include the source vertex in mstset
         mstset[0] = true;
-
         // Set key value to 0  so that it is extracted first out of PriorityQueue
         e[0].key = 0;
 
-        // PriorityQueue
-        PriorityQueue<node> queue = new PriorityQueue<>(V, (u, v) -> u.key - v.key);
+        TreeSet<Node> queue = new TreeSet<>((u, v) -> {
+            if(u.key - v.key !=0){
+                return u.key - v.key;
+            }else
+                return u.vertex-v.vertex;
+        });
 
         for (int i = 0; i < V; i++) {
             queue.add(e[i]);
@@ -122,14 +123,14 @@ class WGraph {
         // Loops until the PriorityQueue is not empty
         while (!queue.isEmpty()) {
             // Extracts a node with min key value
-            node node0 = queue.poll();
+            Node node0 = queue.pollFirst();
 
             // Include that node into mstset
             mstset[node0.vertex] = true;
 
             // For all adjacent vertex of the extracted vertex V
             for (WGNode wgNode : adj.get(node0.vertex)) {
-                // If V is not in PriorityQueue
+                // If V is not already included
                 if (mstset[wgNode.dest] == false) {
                     // update the key value of adjacent vertex
                     // to update first remove and add the updated vertex
@@ -147,14 +148,6 @@ class WGraph {
         for (int i = 1; i < V; i++) {
             System.out.println(parent[i] + " - " + i);
         }
-
-
-        List<Integer> a = Collections.synchronizedList(new ArrayList<>());
-
-        HashMap<Integer,Integer> az = new HashMap<>();
-        az.put(1,1);
-        Collections.synchronizedSet(new HashSet<>());
-        Collections.synchronizedMap(new HashMap< >());
 
     }
 
@@ -188,7 +181,8 @@ public class WeightedGraph {
 
         System.out.println("\n=== bfs === from 0");
         graph.bfs(0);
-        System.out.println();
+        System.out.println(" === ");
+        System.out.println(" === ");
         graph.prims_mst();
 
     }

@@ -5,7 +5,7 @@ public class patternExist {
 
 
     public static void main(String args[]) throws Exception {
-        String s = "xyzxyxyz";
+        String s = "xyzxyzxyz";
         int i, j;
         boolean mat = false;
         for (i = 1; i < s.length() / 2 + 1; i++) {

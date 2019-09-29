@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 // Java progrm to demonstrate working of priority queue in Java
 import java.util.*;
@@ -12,8 +12,9 @@ public class TestPQueue
                           new PriorityQueue<String>();
  
         // Adding items to the pQueue
-        pQueue.add("C");
         pQueue.add("C++");
+        pQueue.add("C");
+
         pQueue.add("Java");
         pQueue.add("Python");
  

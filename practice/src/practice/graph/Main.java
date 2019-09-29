@@ -1,6 +1,5 @@
 package practice.graph;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 class Graph {
@@ -149,32 +148,33 @@ class Graph {
     void printAllPath(int s, int d) {
         boolean[] visited = new boolean[V];
         List<Integer> path = new ArrayList<>();
-        path.add(s);
+        //path.add(s);
         printPathUtil(s, d, visited, path);
     }
 
     private void printPathUtil(int s, int d, boolean[] visited, List<Integer> path) {
         visited[s] = true;
+        path.add(s);
         if (s == d) {
             System.out.println("Path Found " + path);
         } else {
             List<Integer> neighbours = adj.get(s);
             for (Integer neighbour : neighbours) {
                 if (!visited[neighbour]) {
-                    path.add(neighbour);
+                    //path.add(neighbour);
                     printPathUtil(neighbour, d, visited, path);
-                    path.remove(neighbour);
+                    //path.remove(neighbour);
                 }
             }
-
         }
         visited[s] = false;
+        path.remove(s);
         return;
     }
 
     //Delete Edge to minimize subtree sum difference
     // Method returns minimum subtree sum difference
-    // not working gfg/delete-edge-minimize-subtree-sum-difference/
+    // not working , check gfg/delete-edge-minimize-subtree-sum-difference/
     int getMinSubtreeSumDifference(int vertexWeight[]) {
         int totalWeight = 0;
         for (int i = 0; i < V; i++) {
@@ -212,11 +212,12 @@ class Graph {
             if (!visited[neighbour])
                 topologicalSortUtil(neighbour, visited, stack);
         }
-        stack.push(new Integer(v));
+        stack.push(v);
     }
 
     // check for all-topological-sorts-of-a-directed-acyclic-graph/
-    //another simpler way- use queue starting from 0 degree verted, reduce indegree of neighbour, save in topological array keep repeating
+    // another simpler way- use queue starting from 0 degree vertex,
+    // reduce in-degree of neighbour, save in topological array keep repeating
     void topologicalSort() {
         Stack stack = new Stack();
 
@@ -229,7 +230,7 @@ class Graph {
                 topologicalSortUtil(i, visited, stack);
 
         // Print contents of stack
-        while (stack.empty() == false)
+        while (!stack.empty())
             System.out.print(stack.pop() + " ");
     }
 }

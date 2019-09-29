@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 // all object
 class Test implements Cloneable {

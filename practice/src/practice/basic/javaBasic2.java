@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 //A Java program with overloaded main()
 

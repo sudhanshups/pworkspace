@@ -3,60 +3,75 @@ package practice;
 
 public class TreeRightPointer {
 
-    static class Node {
+    static class TreeLinkNode {
         int data;
-        Node left, right, nextRight;
+        TreeLinkNode left, right, next;
 
-        Node(int item) {
+        TreeLinkNode(int item) {
             data = item;
-            left = right = nextRight = null;
+            left = right = next = null;
 
         }
     }
 
-    static void connect(Node root) {
-        if (root != null)
-            connectUtil(root.left, root.right);
-    }
-
-    static Node getNextRight(Node node) {
-        if (node == null)
-            return node;
-        if (node.left != null)
-            return node.left;
-        else
-            return node.right;
-    }
-
-    static void connectUtil(Node l, Node r) {
-        if (l == null && r == null)
+    public static  void connect(TreeLinkNode root) {
+        if (root == null)
             return;
-        if (r != null)
-            connectUtil(r.left, r.right);
-        if (l != null) {
-            l.nextRight = r;
-            if (l.right == null && r != null) {
-                connectUtil(l.left, getNextRight(r));
-            } else if (r != null) {
-                connectUtil(l.right, r.left);
+        root.next = null;
+
+        while (root != null) {
+            TreeLinkNode q = root;
+            while (q != null) {
+                if (q.left != null) {
+                    if (q.right != null)
+                        q.left.next = q.right;
+                    else
+                        q.left.next = getNextRightForChildOf(q);
+                }
+
+                if (q.right != null)
+                    q.right.next = getNextRightForChildOf(q);
+                q = q.next;
             }
-            connectUtil(l.left, l.right);
+
+            if (root.left != null)
+                root = root.left;
+            else if (root.right != null)
+                root = root.right;
+            else
+                root = getNextRightForChildOf(root);
         }
     }
+
+    static TreeLinkNode  getNextRightForChildOf(TreeLinkNode p) {
+        TreeLinkNode temp = p.next;
+
+        while (temp != null) {
+            if (temp.left != null)
+                return temp.left;
+            if (temp.right != null)
+                return temp.right;
+            temp = temp.next;
+        }
+        return null;
+    }
+
+
 
 
     public static void main(String args[]) {
+// can be done using level order traversal
 
-/*        Node root = new Node(10);
-        root.left = new Node(3);
-        root.right = new Node(5);
-        root.left.left = new Node(4);
-        root.left.right = new Node(1);
-        root.right.right = new Node(2);*/
+/*        TreeLinkNode root = new TreeLinkNode(10);
+        root.left = new TreeLinkNode(3);
+        root.right = new TreeLinkNode(5);
+        root.left.left = new TreeLinkNode(4);
+        root.left.right = new TreeLinkNode(1);
+        root.right.right = new TreeLinkNode(2);*/
 
-        Node root = new Node(3);
-        root.left = new Node(1);
-        root.right = new Node(2);
+        TreeLinkNode root = new TreeLinkNode(3);
+        root.left = new TreeLinkNode(1);
+        root.right = new TreeLinkNode(2);
 
         // preorder(root);
         connect(root);
@@ -64,14 +79,15 @@ public class TreeRightPointer {
 
     }
 
-    static void preorder(Node root) {
+
+    static void preorder(TreeLinkNode root) {
         if (root == null)
             return;
 
-        if (root.nextRight != null)
-            System.out.println(root.data + " -> " + root.nextRight.data);
+        if (root.next != null)
+            System.out.println(root.data + " -> " + root.next.data);
         else
-            System.out.println(root.data + " -> " + root.nextRight);
+            System.out.println(root.data + " -> " + root.next);
         preorder(root.left);
         preorder(root.right);
     }

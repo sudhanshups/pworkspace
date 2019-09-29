@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 abstract class Instrument {
       String name;

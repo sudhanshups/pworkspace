@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 import java.util.*;
 
@@ -22,9 +22,12 @@ public class TestHashSet {
 		set1.add("Vijay");
 		set1.add("Ravi");
 		Iterator<String> itr1 = set1.iterator();
+		System.out.println("===============");
+
 		while (itr1.hasNext()) {
 			System.out.println(itr1.next());
 		}
+		System.out.println("===============");
 
 		Set<String> set2 = new TreeSet<>();
 		set2.add("Ajay");

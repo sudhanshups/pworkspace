@@ -1,10 +1,8 @@
-package practice;
+package practice.basic;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,7 +38,7 @@ public class Java8Tester {
         Java8Tester tester = new Java8Tester();
 
         System.out.println("Sort Example START");
-        tester.sortingExample(tester);
+        tester.sortingExample();
         System.out.println("Sort Example END");
 
         System.out.println("Lambda Expressions Example START");
@@ -56,7 +54,6 @@ public class Java8Tester {
         System.out.println("Functional Interface Example END");
 
         System.out.println("Default Method Example START");
-        tester.functionalInterface(tester);
         Vehicle vehicle = new Car();
         vehicle.print();
         System.out.println("Default Method Example END");
@@ -187,7 +184,7 @@ public class Java8Tester {
         return mathOperation.operation(a, b);
     }
 
-    private void sortingExample(Java8Tester tester) {
+    private void sortingExample() {
         List<String> names1 = new ArrayList<String>();
         names1.add("Mahesh ");
         names1.add("Suresh ");
@@ -204,7 +201,7 @@ public class Java8Tester {
 
         System.out.println("Sort using Java 7 syntax: ");
 
-        tester.sortUsingJava7(names1);
+        sortUsingJava7(names1);
         // another way of writing same with comparator
         Collections.sort(names1, new Comparator<String>() {
             @Override
@@ -216,7 +213,7 @@ public class Java8Tester {
         System.out.println(names1);
         System.out.println("Sort using Java 8 syntax: ");
 
-        tester.sortUsingJava8(names2);
+        sortUsingJava8(names2);
         // another way of writing same
         Collections.sort(names2, (s1, s2) -> s1.compareTo(s2));
         System.out.println(names2);

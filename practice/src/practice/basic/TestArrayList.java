@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 import java.util.*;
 
 public class TestArrayList {
@@ -19,6 +19,8 @@ public class TestArrayList {
 			System.out.println(itr.next());
 		}
 
+		System.out.println("===============");
+
 		for (String obj : lt)
 			System.out.println(obj);
 
@@ -27,6 +29,7 @@ public class TestArrayList {
 		al.add("Vijay");
 		al.add("Ravi");
 		al.add("Ajay");
+		System.out.println("===============");
 
 		Iterator<String> itr1 = al.iterator();
 		while (itr1.hasNext()) {

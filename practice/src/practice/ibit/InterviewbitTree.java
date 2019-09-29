@@ -28,10 +28,10 @@ public class InterviewbitTree {
 
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
-        root.left.left = new TreeNode(3);
-//        root.right = new TreeNode(4);
-        //root.right.left = new TreeNode(9);
-//        root.right.right = new TreeNode(5);
+        //root.left.left = new TreeNode(3);
+        root.right = new TreeNode(3);
+        root.right.left = new TreeNode(4);
+        root.right.left.right = new TreeNode(5);
 
 /*
         6
@@ -72,9 +72,37 @@ public class InterviewbitTree {
 //        System.out.println(ibit.lca(root, 1, 2));
         /*TreeNode result = ibit.flatenBTToLinkList(root);
         System.out.println(result);*/
+        ArrayList<Integer> height = new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 2));
+        ibit.arrange(height, new ArrayList<>(Arrays.asList(0, 1, 2, 0, 3, 2)));
+        System.out.println(height);
 
-        ibit.arrange(new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 2)), new ArrayList<>(Arrays.asList(0, 1, 2, 0, 3, 2)));
 
+        TreeNode root1 = new TreeNode(4);
+        root1.left = new TreeNode(2);
+        root1.left.right = new TreeNode(3);
+        root1.right = new TreeNode(6);
+        root1.right.left = new TreeNode(5);
+        root1.right.right = new TreeNode(7);
+/*
+          4
+    2          6
+       3   5     7
+*/
+        //System.out.println("--"+ibit.isValidBST(root1));
+        System.out.println(ibit.isValidBST(root));
+    }
+
+    public int isValidBST(TreeNode A) {
+        return isValidBSTUtil(A, Integer.MIN_VALUE, Integer.MAX_VALUE) ? 1 : 0;
+    }
+
+    private boolean isValidBSTUtil(TreeNode root, int min, int max) {
+        if (root == null)
+            return true;
+        if (root.val < min || root.val > max) {
+            return false;
+        }
+        return isValidBSTUtil(root.left,min,root.val-1) && isValidBSTUtil(root.right,root.val+1,max);
     }
 
     // people heights

@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 class Base {
     int a;

@@ -1,10 +1,10 @@
-package practice;
+package practice.basic;
 
 // Super class in factory pattern can be an interface, abstract class or a
 // normal java class. For our example, we have super class as abstract class
 // with overridden toString() method for testing purpose.
  
-abstract class CrunchfiyCompany {
+abstract class Company {
  
 	public abstract String getPhoneNumber();
  
@@ -15,14 +15,14 @@ abstract class CrunchfiyCompany {
 		return "Phone #= " + this.getPhoneNumber() + ", Zip Code= " + this.getZipCode();
 	}
 }
-//Notice that the class is extending CrunchfiyCompany class.
+//Notice that the class is extending Company class.
 
-class CrunchifyEbay extends CrunchfiyCompany {
+class Ebay extends Company {
 
 	private String phoneNumber;
 	private String zipCode;
 
-	public CrunchifyEbay(String phoneNumber, String zipCode) {
+	public Ebay(String phoneNumber, String zipCode) {
 		this.phoneNumber = phoneNumber;
 		this.zipCode = zipCode;
 	}
@@ -37,14 +37,14 @@ class CrunchifyEbay extends CrunchfiyCompany {
 		return this.zipCode;
 	}
 }
-//Notice that the class is extending CrunchfiyCompany class.
+//Notice that the class is extending Company class.
 
-class CrunchifyGoogle extends CrunchfiyCompany {
+class Google extends Company {
 
 	private String phoneNumber;
 	private String zipCode;
 
-	public CrunchifyGoogle(String phoneNumber, String zipCode) {
+	public Google(String phoneNumber, String zipCode) {
 		this.phoneNumber = phoneNumber;
 		this.zipCode = zipCode;
 	}
@@ -63,13 +63,13 @@ class CrunchifyGoogle extends CrunchfiyCompany {
 //We can keep Factory class Singleton or we can keep the method that return the subclass a static.
 //Notice that based on the input parameter, different subclass is created and returned.
 
-class CrunchifyFactoryPattern {
+class FactoryPattern {
 
-	public static CrunchfiyCompany getDetails(String type, String phoneNumber, String zipCode) {
+	public static Company getDetails(String type, String phoneNumber, String zipCode) {
 		if ("Ebay".equalsIgnoreCase(type))
-			return new CrunchifyEbay(phoneNumber, zipCode);
+			return new Ebay(phoneNumber, zipCode);
 		else if ("Google".equalsIgnoreCase(type))
-			return new CrunchifyGoogle(phoneNumber, zipCode);
+			return new Google(phoneNumber, zipCode);
 
 		return null;
 	}
@@ -77,8 +77,8 @@ class CrunchifyFactoryPattern {
 public class FactoryPatternTest {
 	 
 	public static void main(String[] args) {
-		CrunchfiyCompany eBay = CrunchifyFactoryPattern.getDetails("Ebay", "408.123.4567", "98765");
-		CrunchfiyCompany google = CrunchifyFactoryPattern.getDetails("Google", "519.123.4567", "56789");
+		Company eBay = FactoryPattern.getDetails("Ebay", "408.123.4567", "98765");
+		Company google = FactoryPattern.getDetails("Google", "519.123.4567", "56789");
 		System.out.println("Factory eBay Config::" + eBay);
 
 		System.out.println("Factory Google Config::" + google);

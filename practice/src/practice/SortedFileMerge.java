@@ -1,6 +1,6 @@
 
 package practice;
-/*
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -73,4 +73,3 @@ public class SortedFileMerge {
         }
     }
 }
-*/

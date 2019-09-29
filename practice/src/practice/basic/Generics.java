@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 class MyGen<T> {
 	T obj;

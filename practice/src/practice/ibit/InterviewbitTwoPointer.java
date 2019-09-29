@@ -63,6 +63,56 @@ public class InterviewbitTwoPointer {
         ArrayList<Integer> C = new ArrayList<>(Arrays.asList(10, 12));
         System.out.println(ibit.minimize(A, B, C));
 
+        System.out.println(ibit.countInversions(new ArrayList<>(Arrays.asList(2,1,1))));
+    }
+
+    public int countInversions(ArrayList<Integer> A) {
+        int low = 0, high = A.size() - 1;
+        int inversion = mergeSort(A, low, high);
+        return inversion;
+    }
+
+    private int mergeSort(final ArrayList<Integer> A, int low, int high) {
+        if (low >= high)
+            return 0;
+        int mid = (low + high) / 2;
+        int inversion = mergeSort(A, low, mid);
+        inversion += mergeSort(A, mid + 1, high);
+        inversion += merge(A, low, mid, high);
+        return inversion;
+    }
+
+    private int merge(final ArrayList<Integer> A, int low, int mid, int high) {
+        int i, j, k;
+        int n1 = mid - low + 1;
+        int n2 = high - mid;
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+        for (i = 0; i < n1; i++) {
+            L[i] = A.get(i + low);
+        }
+        for (i = 0; i < n2; i++) {
+            R[i] = A.get(i + mid + 1);
+        }
+        i = j = 0;
+        k = low;
+        int inversion = 0;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                A.set(k++, L[i++]);
+            } else {
+                inversion += n1 - i;
+                A.set(k++, R[j++]);
+            }
+        }
+        while (i < n1) {
+            A.set(k++, L[i++]);
+        }
+        while (j < n2) {
+            A.set(k++, R[j++]);
+        }
+
+        return inversion;
     }
 
     class Element {

@@ -245,7 +245,7 @@ public class BinarySearchTree {
         System.out.println("Binary Search Tree Lowest Common ancestor of 2 ,4 is " + bst.lCABSearchTree(2, 4));
 
         // System.out.println("Binary Tree Lowest Common ancestor of 2 ,4 is " + bst.lCABTree(2, 4));
-        System.out.println("3 distance nodes ");
+        System.out.println("2 distance nodes ");
         bst.printkdistanceNode(bst.root, 1, 2);
 
 

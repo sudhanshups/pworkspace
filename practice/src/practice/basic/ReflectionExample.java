@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 import java.lang.reflect.Method;
 class CrunchifyReflectionTest {
 
@@ -30,7 +30,7 @@ public class ReflectionExample {
 		
 		try {
 			// Load CrunchifyReflectionTest Class at runtime
-			Class<?> cls = Class.forName("practice.CrunchifyReflectionTest");
+			Class<?> cls = Class.forName("practice.basic.CrunchifyReflectionTest");
 			Object obj = cls.newInstance();
  
 			Method method = cls.getDeclaredMethod("getCompany", noparams);

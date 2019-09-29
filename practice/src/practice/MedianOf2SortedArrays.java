@@ -12,44 +12,11 @@ public class MedianOf2SortedArrays {
         System.out.println(findMedian(arr1, arr2));
 
     }
-
-    public double findMedianSortedArrays(final List<Integer> arr1, final List<Integer> arr2) {
-
-        if (arr1.size() > arr2.size()) {
-            return findMedianSortedArrays(arr2, arr1);
-        }
-        int len1 = arr1.size();
-        int len2 = arr2.size();
-
-        int low = 0;
-        int high = len1;
-        while (low <= high) {
-            int partition1 = (low + high) / 2;
-            int partition2 = (len1 + len2 + 1) / 2 - partition1;
-
-            int maxLeft1 = partition1 == 0 ? Integer.MIN_VALUE : arr1.get(partition1 - 1);
-            int minRight1 = partition1 == len1 ? Integer.MAX_VALUE : arr1.get(partition1);
-
-            int maxLeft2 = partition2 == 0 ? Integer.MIN_VALUE : arr2.get(partition2 - 1);
-            int minRight2 = partition2 == len2 ? Integer.MAX_VALUE : arr2.get(partition2);
-
-            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
-                if ((len1 + len2) % 2 == 0) {
-                    return ((double) Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2;
-                } else {
-                    return (double) Math.max(maxLeft1, maxLeft2);
-                }
-            } else if (maxLeft1 > minRight2) {
-                high = partition1 - 1;
-            } else {
-                low = partition1 + 1;
-            }
-
-        }
-
-        return 0;
-    }
-
+    
+/*
+x1,x2,x3
+y1,y2,y3,y4
+ */
     public static double findMedian(int arr1[], int arr2[]) {
 
         if (arr1.length > arr2.length) {
@@ -61,25 +28,25 @@ public class MedianOf2SortedArrays {
         int low = 0;
         int high = len1;
         while (low <= high) {
-            int partition1 = (low + high) / 2;
-            int partition2 = (len1 + len2 + 1) / 2 - partition1;
+            int partitionX = (low + high) / 2;
+            int partitionY = (len1 + len2 + 1) / 2 - partitionX;
 
-            int maxLeft1 = partition1 == 0 ? Integer.MIN_VALUE : arr1[partition1 - 1];
-            int minRight1 = partition1 == len1 ? Integer.MAX_VALUE : arr1[partition1];
+            int maxLeftX = partitionX == 0 ? Integer.MIN_VALUE : arr1[partitionX - 1];
+            int minRightX = partitionX == len1 ? Integer.MAX_VALUE : arr1[partitionX];
 
-            int maxLeft2 = partition2 == 0 ? Integer.MIN_VALUE : arr2[partition2 - 1];
-            int minRight2 = partition2 == len2 ? Integer.MAX_VALUE : arr2[partition2];
+            int maxLeftY = partitionY == 0 ? Integer.MIN_VALUE : arr2[partitionY - 1];
+            int minRightY = partitionY == len2 ? Integer.MAX_VALUE : arr2[partitionY];
 
-            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+            if (maxLeftX <= minRightY && maxLeftY <= minRightX) {
                 if ((len1 + len2) % 2 == 0) {
-                    return ((double) Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2;
+                    return ((double) Math.max(maxLeftX, maxLeftY) + Math.min(minRightX, minRightY)) / 2;
                 } else {
-                    return (double) Math.max(maxLeft1, maxLeft2);
+                    return (double) Math.max(maxLeftX, maxLeftY);
                 }
-            } else if (maxLeft1 > minRight2) {
-                high = partition1 - 1;
+            } else if (maxLeftX > minRightY) {
+                high = partitionX - 1;
             } else {
-                low = partition1 + 1;
+                low = partitionX + 1;
             }
 
         }
