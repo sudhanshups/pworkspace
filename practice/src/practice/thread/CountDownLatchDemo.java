@@ -11,8 +11,8 @@ import java.util.concurrent.CountDownLatch;
 
 public class CountDownLatchDemo {
     public static void main(String args[]) throws InterruptedException {
-        // Let us create task that is going to wait for four threads before it starts
-        CountDownLatch latch = new CountDownLatch(4);
+        // Let us create task that is going to wait for given no of threads before it starts
+        CountDownLatch latch = new CountDownLatch(2);
 
         // Let us create four worker threads and start them.
         Worker first = new Worker(1000, latch, "WORKER-1");

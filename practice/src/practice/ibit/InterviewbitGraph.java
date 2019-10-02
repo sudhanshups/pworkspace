@@ -116,6 +116,8 @@ public class InterviewbitGraph {
 
         System.out.println(ibit.SteppingNumbers(10, 20));
 
+        System.out.println(ibit.SteppingNumbers(10, 20));
+
     }
 
     ArrayList<Integer> SteppingNumbers(int n, int m) {

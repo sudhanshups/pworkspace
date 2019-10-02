@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class GM1 {
+
     static String findQualifiedNumbers(int[] numberArray) {
         List<Integer> numbers = new ArrayList<>();
         for (int a : numberArray) {

@@ -1,4 +1,4 @@
-package practice.ibit;
+package practice.specific;
 
 import java.io.BufferedReader;
 import java.io.IOException;

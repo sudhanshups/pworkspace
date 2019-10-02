@@ -6,8 +6,7 @@ package practice.thread;
 import java.util.Scanner;
 
 public class ProducerConsumer {
-    public static void main(String[] args)
-            throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         final PC pc = new PC();
 
         // Create a thread object that calls pc.produce()

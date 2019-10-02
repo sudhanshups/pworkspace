@@ -12,6 +12,7 @@ public class UboundedKnapsack {
         return (i < j) ? i : j;
     }
 
+
     private static int unboundedKnapsack(int W, int n, int[] val, int[] wt) {
 
         // dp[i] is going to store maximum value

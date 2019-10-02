@@ -13,7 +13,7 @@ class NewThread extends Thread {
                 System.out.println(getName() + " executing " + i);
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
-                System.out.println("Exception encounterted");
+                System.out.println("Exception encountered");
             }
         }
     }
