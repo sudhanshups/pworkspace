@@ -11,7 +11,8 @@ class Number implements Runnable {
         while (true) {
             if(!String.valueOf(thread).equals(Thread.currentThread().getName())){
                 try {
-                    wait(1);
+                    wait(1);//wait release lock on this object
+                    //Thread.sleep(1000);// sleep does not release lock
                     //System.out.println("waited" + Thread.currentThread().getName());
                     continue;
                 } catch (InterruptedException e) {
@@ -38,7 +39,7 @@ class Number implements Runnable {
                     thread = 0;
                     break;
             }
-            notify();
+            notify();//notify any one of the waiting thread on this object as method is synchronized, so this object is locked.
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

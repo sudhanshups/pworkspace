@@ -13,8 +13,6 @@ class LRUCache<K, V> extends LinkedHashMap<K, V> {
     public LRUCache(int lruSize) {
         super(16, 0.75f, true);
         this.lruSize = lruSize;
-        ConcurrentLinkedQueue<K> queue = new  ConcurrentLinkedQueue<K>();;
-        queue.remove(1);
     }
 
     @Override

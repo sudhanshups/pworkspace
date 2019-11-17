@@ -1,5 +1,6 @@
 package practice.graph;
 
+import java.io.IOException;
 import java.util.*;
 
 class Graph {
@@ -300,5 +301,155 @@ public class Main {
         System.out.println("Following is a Topological sort of the given graph");
         g.topologicalSort();
 
+        //find articulation point in an undirected graph
+        ArrayList<ArrayList<Integer>> a = new ArrayList<>();
+        a.addAll(Collections.singleton(new ArrayList<>(Arrays.asList(1, 2))));
+        a.addAll(Collections.singleton(new ArrayList<>(Arrays.asList(2, 3))));
+        a.addAll(Collections.singleton(new ArrayList<>(Arrays.asList(3, 4))));
+        a.addAll(Collections.singleton(new ArrayList<>(Arrays.asList(4, 5))));
+        a.addAll(Collections.singleton(new ArrayList<>(Arrays.asList(6, 3))));
+
+        List<Integer> res = criticalRouters(6, 5, a);
+        System.out.println(res);
+
+    }
+
+
+    /*
+     * An articulation point is a vertex whose removal and it's edges will leave the graph in two disconnected component
+     *
+     * A O(V+E) algorithm to find all Articulation Points (APs)
+     * In DFS tree, a vertex u is articulation point if one of the following two conditions is true.
+     * 1) u is root of DFS tree and it has at least two child subtree and these two child subtree should be disjoint.
+     * 2) u is not root of DFS tree and it has a child v such that no vertex in subtree rooted with v has a back edge to one of the ancestors (in DFS tree) of u.
+     *
+     * To check if there is a backEdge for each vertex we maintain 1. discovery time
+     *  2. lowest discovery number reachable from any vertex by taking one back edge(i.e other than parent edge)
+     *  2. in other word : we also maintain the lowest discovery time it has encountered in its subtree(consider the discovery time even if child is visited)
+     *
+     * No backedge to ancestor of u in subtree of u if:
+     * lowest discovery time subtree has encountered >= discovery time of u
+     *
+     * Update the lowest discovery time of u
+     *
+     * Biconnectivity: An articulation vertex (or cut vertex) is a vertex whose removal increases the number of connected components.
+     * A graph is biconnected if it has no articulation vertices. It uses depth-first search to find the bridges and articulation vertices.
+     * It takes time proportional to V + E in the worst case.
+     *
+     */
+    static List<Integer> criticalRouters(int numRouters, int numLinks,
+                                         ArrayList<ArrayList<Integer>> links) {
+        HashMap<Integer, Integer> nodeToRMap = new HashMap<>();
+        HashMap<Integer, Integer> rToNodeMap = new HashMap<>();
+        ArrayList<ArrayList<Integer>> nodeLinks = new ArrayList<>();
+
+        int node = 0;
+        for (int i = 0; i < links.size(); i++) {
+
+            if (!rToNodeMap.containsKey(links.get(i).get(0))) {
+                nodeToRMap.put(node, links.get(i).get(0));
+                rToNodeMap.put(links.get(i).get(0), node);
+                node++;
+            }
+
+            if (!rToNodeMap.containsKey(links.get(i).get(1))) {
+                nodeToRMap.put(node, links.get(i).get(1));
+                rToNodeMap.put(links.get(i).get(1), node);
+                node++;
+            }
+            ArrayList<Integer> link = new ArrayList<>();
+
+            link.add(rToNodeMap.get(links.get(i).get(0)));
+            link.add(rToNodeMap.get(links.get(i).get(1)));
+            nodeLinks.add(link);
+        }
+
+
+        Graph2 g = new Graph2(numRouters);
+
+        for (int i = 0; i < nodeLinks.size(); i++) {
+            g.addEdge(nodeLinks.get(i).get(0), nodeLinks.get(i).get(1));
+        }
+
+        boolean visit[] = new boolean[numRouters];
+        int parent[] = new int[numRouters];
+
+        //lowest discovery number reachable from any vertex by taking one back edge
+        int low[] = new int[numRouters];
+
+        int discoveryTime[] = new int[numRouters];
+        boolean aPoint[] = new boolean[numRouters];
+        Time t = new Time();
+
+        for (int i = 0; i < numRouters; i++) {
+            parent[i] = -1;
+        }
+
+        for (int i = 0; i < numRouters; i++) {
+            if (!visit[i]) {
+                findArticulationPoint(i, visit, parent, low, discoveryTime, aPoint, g, t);
+            }
+        }
+
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < numRouters; i++) {
+            if (aPoint[i]) {
+                res.add(nodeToRMap.get(i));
+            }
+        }
+        return res;
+    }
+
+    static void findArticulationPoint(int u, boolean[] visit, int[] parent, int[] low, int[] discoveryTime,
+                                      boolean[] aPoint, Graph2 g, Time t) {
+        int disconnectedComponent = 0;
+        visit[u] = true;
+        t.time++;
+        discoveryTime[u] = low[u] = t.time;
+
+        for (Integer v : g.adj.get(u)) {
+
+            if (!visit[v]) {
+                disconnectedComponent++;
+                parent[v] = u;
+                findArticulationPoint(v, visit, parent, low, discoveryTime, aPoint, g, t);
+
+                if (parent[u] == -1 && disconnectedComponent > 1) {
+                    aPoint[u] = true;
+                }
+
+                if (parent[u] != -1 && discoveryTime[u] <= low[v]) {
+                    aPoint[u] = true;
+                }
+                low[u] = Math.min(low[u], low[v]);
+
+            } else if (parent[u] != v) {
+                low[u] = Math.min(discoveryTime[v], low[u]);
+            }
+        }
+    }
+
+}
+
+class Graph2 {
+    int v;
+    List<List<Integer>> adj;
+
+    Graph2(int v) {
+        this.v = v;
+        adj = new ArrayList<>();
+        for (int i = 0; i < v; i++) {
+            adj.add(new ArrayList<>());
+        }
+    }
+
+    void addEdge(int u, int v) {
+        adj.get(u).add(v);
+        adj.get(v).add(u);
     }
 }
+
+class Time {
+    int time = 0;
+}
+

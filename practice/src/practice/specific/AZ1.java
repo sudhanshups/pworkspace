@@ -56,12 +56,12 @@ public class AZ1 {
         return stringBuilder.toString();
     }
 
-    static public String solution(String s, int k) {
-        if(s.length()<=k)
+    static public String getFirstKCharacter(String s, int k) {
+        if (s.length() <= k)
             return s;
 
         String sub = s.substring(0, k);
-        if(s.charAt(k)== ' ') {
+        if (s.charAt(k) == ' ') {
             return sub;
         }
         int lastIndexOfSpace = sub.lastIndexOf(' ');
@@ -70,15 +70,83 @@ public class AZ1 {
 
 
     public static void main(String[] args) throws IOException {
-        System.out.println(solution(6, 1, 1));
+       /* System.out.println(solution(6, 1, 1));
         System.out.println(solution(1, 3, 1));
         System.out.println(solution(0, 1, 8));
         System.out.println(solution(0, 0, 0));
         System.out.println(solution(1, 1, 1));
+*/
+        //System.out.println(getFirstKCharacter("abc d efg", 5));
 
-        System.out.println(solution("abc d efg",5));
+        AZ1 az1 = new AZ1();
+        List<Integer> a = Arrays.asList(1, 0, 0);
+        List<Integer> b = Arrays.asList(1, 0, 0);
+        List<Integer> c = Arrays.asList(1, 0, 0);
+        List<List<Integer>> d = new ArrayList<>();
+        d.add(a);
+        d.add(b);
+        d.add(c);
+
+        System.out.println(az1.minimumDistanceToVisitArea(3, 3, d));
 
     }
 
+    class Point {
+        int i;
+        int j;
+
+        Point(int a, int b) {
+            i = a;
+            j = b;
+        }
+    }
+
+    int minimumDistanceToVisitArea(int numRows, int numCols, List<List<Integer>> area) {
+        //bfs
+
+        boolean[][] visited = new boolean[numRows][numCols];
+        visited[0][0] = true;
+
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(new Point(0, 0));
+        queue.add(null);
+        int dist = 0;
+        boolean found = false;
+        int[] x = {-1, +1, 0, 0};
+        int[] y = {0, 0, -1, +1};
+        while (!queue.isEmpty()) {
+            Point cur = queue.poll();
+            if (cur == null) {
+                if (!queue.isEmpty()) {
+                    dist++;
+                    queue.add(null);
+                }
+            } else {
+                if (area.get(cur.i).get(cur.j) == 9) {
+                    found = true;
+                    break;
+                }else if(area.get(cur.i).get(cur.j)==1) {
+                    for (int i = 0; i < 4; i++) {
+                        int nx = cur.i + x[i];
+                        int ny = cur.j + y[i];
+                        if (isValid(nx, ny, numRows, numCols, visited)) {
+                            queue.add(new Point(nx, ny));
+                            visited[nx][ny] = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (found)
+            return dist;
+        return -1;
+    }
+
+    private boolean isValid(int i, int j, int rows, int cols, boolean visited[][]) {
+        if (i < 0 || i >= rows || j < 0 || j >= cols || visited[i][j]) {
+            return false;
+        }
+        return true;
+    }
 
 }

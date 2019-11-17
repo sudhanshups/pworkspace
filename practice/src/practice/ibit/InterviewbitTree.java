@@ -70,27 +70,138 @@ public class InterviewbitTree {
 //        System.out.println(ibit.prefix(new ArrayList<>(Arrays.asList("zebra", "dog", "duck", "dove"))));
 
 //        System.out.println(ibit.lca(root, 1, 2));
-        /*TreeNode result = ibit.flatenBTToLinkList(root);
-        System.out.println(result);*/
-        ArrayList<Integer> height = new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 2));
+        TreeNode result = ibit.flatenBTToLinkList(root);
+        System.out.println(result);
+
+/*        ArrayList<Integer> height = new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 2));
         ibit.arrange(height, new ArrayList<>(Arrays.asList(0, 1, 2, 0, 3, 2)));
-        System.out.println(height);
+        System.out.println(height);*/
 
 
         TreeNode root1 = new TreeNode(4);
         root1.left = new TreeNode(2);
+        root1.left.left = new TreeNode(7);
+
         root1.left.right = new TreeNode(3);
-        root1.right = new TreeNode(6);
-        root1.right.left = new TreeNode(5);
-        root1.right.right = new TreeNode(7);
+        root1.left.right.left = new TreeNode(5);
+        root1.left.right.right = new TreeNode(7);
 /*
           4
     2          6
        3   5     7
 */
         //System.out.println("--"+ibit.isValidBST(root1));
-        System.out.println(ibit.isValidBST(root));
+        //System.out.println(ibit.isValidBST(root));
+
+        //System.out.println(ibit.minCameraCover(root1));
+/*        System.out.println(ibit.lowestCommonAncestor(root1, 7, 2));
+
+        System.out.println(ibit.diameterOfBinaryTree(root1));*/
+
+//Distribute coinf in binary tree https://leetcode.com/problems/distribute-coins-in-binary-tree/
+        TreeNode root2 = new TreeNode(0);
+        root2.left = new TreeNode(3);
+        root2.right = new TreeNode(0);
+//        root1.left.left = new TreeNode(7);
+/*        root1.left.right = new TreeNode(3);
+        root1.left.right.left = new TreeNode(5);
+        root1.left.right.right = new TreeNode(7);*/
+        System.out.println(ibit.distributeCoins(root2));
+        System.out.println();
     }
+
+    class Moves {
+        int ans = 0;
+    }
+
+    public int distributeCoins(TreeNode root) {
+        //post order
+        Moves m = new Moves();
+        int x = coinNeeded(root, m);
+        return m.ans;
+    }
+
+    private int coinNeeded(TreeNode root, Moves m) {
+        if (root == null) {
+            return 0;
+        }
+        int leftCountNeeded = coinNeeded(root.left, m);
+        int rightCountNeeded = coinNeeded(root.right, m);
+        m.ans += Math.abs(leftCountNeeded) + Math.abs(rightCountNeeded);
+        int extraCoinAtThisNodC = root.val + leftCountNeeded + rightCountNeeded - 1;
+        return extraCoinAtThisNodC;
+    }
+
+    class A {
+        int ans = Integer.MIN_VALUE;
+    }
+
+    int height(TreeNode root, A a) {
+        if (root == null)
+            return 0;
+        int lh = height(root.left, a);
+        int rh = height(root.right, a);
+        a.ans = Math.max(a.ans, 1 + lh + rh);
+        return 1 + Math.max(lh, rh);
+    }
+
+    int diameterOfBinaryTree(TreeNode root) {
+        A a = new A();
+        height(root, a);
+        return a.ans;
+    }
+
+
+    private TreeNode ans1;
+
+    private boolean recurseTree(TreeNode currentNode, int p, int q) {
+        if (currentNode == null) {
+            return false;
+        }
+        int left = this.recurseTree(currentNode.left, p, q) ? 1 : 0;        // Left Recursion. If left recursion returns true, set left = 1 else 0
+        int right = this.recurseTree(currentNode.right, p, q) ? 1 : 0;        // Right Recursion
+        int mid = (currentNode.val == p || currentNode.val == q) ? 1 : 0;// If the current node is one of p or q
+        if (mid + left + right >= 2) { //If any two of the flags left, right or mid become True
+            this.ans1 = currentNode;
+        }
+        return (mid + left + right > 0);//If any two of the flags left, right or mid become True
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, int p, int q) {
+        // Traverse the tree
+        this.recurseTree(root, p, q);
+        return this.ans1;
+    }
+
+    int ans;
+
+    public int minCameraCover(TreeNode root) {
+        Set<TreeNode> covered;
+        ans = 0;
+        covered = new HashSet();
+        covered.add(null);
+
+        dfs(root, null, covered);
+        return ans;
+    }
+
+    public void dfs(TreeNode node, TreeNode par, Set<TreeNode> covered) {
+        if (node != null) {
+            dfs(node.left, node, covered);
+            dfs(node.right, node, covered);
+
+            if (par == null && !covered.contains(node) ||
+                    !covered.contains(node.left) ||
+                    !covered.contains(node.right)) {
+                ans++;
+                covered.add(node);
+                covered.add(par);
+                covered.add(node.left);
+                covered.add(node.right);
+            }
+        }
+    }
+
 
     public int isValidBST(TreeNode A) {
         return isValidBSTUtil(A, Integer.MIN_VALUE, Integer.MAX_VALUE) ? 1 : 0;
@@ -102,7 +213,7 @@ public class InterviewbitTree {
         if (root.val < min || root.val > max) {
             return false;
         }
-        return isValidBSTUtil(root.left,min,root.val-1) && isValidBSTUtil(root.right,root.val+1,max);
+        return isValidBSTUtil(root.left, min, root.val - 1) && isValidBSTUtil(root.right, root.val + 1, max);
     }
 
     // people heights
@@ -309,33 +420,70 @@ public class InterviewbitTree {
         int val;
         TreeLinkNode left;
         TreeLinkNode right;
-        TreeLinkNode next;
+        TreeLinkNode nextRight;
 
         TreeLinkNode(int a) {
             val = a;
         }
     }
 
+    // connect next right
+    /* Set next right of all descendents of p. This function makes sure that
+       nextRight of nodes ar level i is set before level i+1 nodes. */
+    void connectRecur(TreeLinkNode p) {
+        // Base case
+        if (p == null)
+            return;
+
+        /* Before setting nextRight of left and right children, set nextRight
+           of children of other nodes at same level (because we can access
+           children of other nodes using p's nextRight only) */
+        if (p.nextRight != null)
+            connectRecur(p.nextRight);
+
+        /* Set the nextRight pointer for p's left child */
+        if (p.left != null) {
+            if (p.right != null) {
+                p.left.nextRight = p.right;
+                p.right.nextRight = getNextRightForChildOf(p);
+            } else
+                p.left.nextRight = getNextRightForChildOf(p);
+
+            /* Recursively call for next level nodes.  Note that we call only
+             for left child. The call for left child will call for right child */
+            connectRecur(p.left);
+        }
+
+        /* If left child is NULL then first node of next level will either be
+         p->right or getNextRight(p) */
+        else if (p.right != null) {
+            p.right.nextRight = getNextRightForChildOf(p);
+            connectRecur(p.right);
+        } else
+            connectRecur(getNextRightForChildOf(p));
+    }
+
+
     //connect next right
     public void connect(TreeLinkNode root) {
         TreeLinkNode temp = null;
         if (root == null)
             return;
-        root.next = null;
+        root.nextRight = null;
 
         while (root != null) {
             TreeLinkNode q = root;
             while (q != null) {
                 if (q.left != null) {
                     if (q.right != null)
-                        q.left.next = q.right;
+                        q.left.nextRight = q.right;
                     else
-                        q.left.next = getNextRightForChildOf(q);
+                        q.left.nextRight = getNextRightForChildOf(q);
                 }
 
                 if (q.right != null)
-                    q.right.next = getNextRightForChildOf(q);
-                q = q.next;
+                    q.right.nextRight = getNextRightForChildOf(q);
+                q = q.nextRight;
             }
 
             if (root.left != null)
@@ -348,14 +496,14 @@ public class InterviewbitTree {
     }
 
     TreeLinkNode getNextRightForChildOf(TreeLinkNode p) {
-        TreeLinkNode temp = p.next;
+        TreeLinkNode temp = p.nextRight;
 
         while (temp != null) {
             if (temp.left != null)
                 return temp.left;
             if (temp.right != null)
                 return temp.right;
-            temp = temp.next;
+            temp = temp.nextRight;
         }
         return null;
     }
@@ -938,5 +1086,6 @@ public class InterviewbitTree {
 
         return new ArrayList<>(verticalNodesWithDistance.values());
     }
+
 
 }

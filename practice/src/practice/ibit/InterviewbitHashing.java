@@ -1,5 +1,7 @@
 package practice.ibit;
 
+import javafx.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -91,9 +93,66 @@ public class InterviewbitHashing {
         ArrayList<Integer> y = new ArrayList<>(Arrays.asList(0, 1, 2, 2));
         System.out.println(ibit.maxPoints(x, y));*/
 
-        ArrayList<String> words = new ArrayList<>(Arrays.asList("foo", "bar"));
-        System.out.println(ibit.findSubstringIndices("barfoothefoobarman", words));
+/*        ArrayList<String> words = new ArrayList<>(Arrays.asList("foo", "bar"));
+        System.out.println(ibit.findSubstringIndices("barfoothefoobarman", words));*/
 
+        System.out.println(ibit.getSubstringWithEqual012("012012"));
+        System.out.println(ibit.countSubarrWithEqualZeroAndOne(new int[]{0, 1, 0, 1}, 4));
+
+
+    }
+
+    static int countSubarrWithEqualZeroAndOne(int arr[], int n) {
+        // 'um' implemented as hash table to store frequency of values obtained through cumulative sum
+        Map<Integer, Integer> um = new HashMap<>();
+        int curr_sum = 0;
+
+        for (int i = 0; i < n; i++) {
+            curr_sum += (arr[i] == 0) ? -1 : arr[i];
+            um.put(curr_sum, um.get(curr_sum) == null ? 1 : um.get(curr_sum) + 1);
+        }
+
+        int count = 0;
+
+        for (Map.Entry<Integer, Integer> itr : um.entrySet()) {
+            // If there are more than one prefix subarrays with a particular sum
+            if (itr.getValue() > 1)
+                count += ((itr.getValue() * (itr.getValue() - 1)) / 2);
+        }
+
+        // add the subarrays starting from 1st element and have equal number of 1's and 0's
+        if (um.containsKey(0))
+            count += um.get(0);
+
+        return count;
+    }
+
+    int getSubstringWithEqual012(String str) {
+        int n = str.length();
+        // map to store, how many times a difference pair has occurred previously
+        Map<Pair<Integer, Integer>, Integer> mp = new HashMap<>();
+        mp.put(new Pair<>(0, 0), 1);
+
+        int zc = 0, oc = 0, tc = 0;
+
+        int res = 0;
+        for (int i = 0; i < n; ++i) {
+            if (str.charAt(i) == '0') zc++;
+            else if (str.charAt(i) == '1') oc++;
+            else tc++;  // Assuming that string doesn't contain other characters
+
+            // making pair of differences (z[i] - o[i], z[i] - t[i])
+            Pair<Integer, Integer> tmp = new Pair(zc - oc, zc - tc);
+
+            // Count of previous occurrences of above pair indicates that the subarrays forming from
+            // every previous occurrence to this occurrence is a subarray with equal number of 0's, 1's and 2's
+            res = res + mp.getOrDefault(tmp, 0);
+
+            // increasing the count of current difference pair by 1
+            mp.put(tmp, mp.getOrDefault(tmp, 0) + 1);
+        }
+
+        return res;
     }
 
     public ArrayList<Integer> findSubstringIndices(String S, ArrayList<String> words) {

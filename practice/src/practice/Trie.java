@@ -1,5 +1,6 @@
 package practice;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,10 +12,10 @@ class TrieNode {
     }
 }
 
-
 public class Trie {
 
     public static void main(String[] args) {
+        System.out.println(new Integer(1).compareTo(new Integer(2)));
         TrieNode root = new TrieNode();
         String[] words = new String[]{"Sud", "Bana", "Banana"};
         for (int i = 0; i < words.length; i++) {
@@ -49,5 +50,32 @@ public class Trie {
             return true;
         }
         return false;
+    }
+
+
+
+    //https://leetcode.com/problems/reorder-data-in-log-files/
+    static String[] reorderLogFile(String[] logs) {
+        Arrays.sort(logs, (u, v) -> {
+            int s1F = u.indexOf(' ');
+            int s2F = v.indexOf(' ');
+            char s1Fc = u.charAt(s1F + 1);
+            char s2Fc = v.charAt(s2F + 1);
+            if (s1Fc <= '9') {
+                if (s2Fc <= '9') {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+            if (s2Fc <= '9') {
+                return -1;
+            }
+            int preCompute = u.substring(s1F + 1).compareTo(v.substring(s2F + 1));
+            if (preCompute == 0)
+                return u.substring(0, s1F).compareTo(v.substring(0, s2F));
+            return preCompute;
+        });
+        return logs;
     }
 }

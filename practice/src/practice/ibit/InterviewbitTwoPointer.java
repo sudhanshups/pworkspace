@@ -63,8 +63,34 @@ public class InterviewbitTwoPointer {
         ArrayList<Integer> C = new ArrayList<>(Arrays.asList(10, 12));
         System.out.println(ibit.minimize(A, B, C));
 
-        System.out.println(ibit.countInversions(new ArrayList<>(Arrays.asList(2,1,1))));
+        System.out.println(ibit.countInversions(new ArrayList<>(Arrays.asList(2, 1, 1))));
     }
+
+    //trap water
+    int trap(int height[]) {
+        int left = 0, right = height.length - 1;
+        int ans = 0;
+        int left_max = 0, right_max = 0;
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= left_max) {
+                    left_max = height[left];
+                } else {
+                    ans += (left_max - height[left]);
+                }
+                ++left;
+            } else {
+                if (height[right] >= right_max) {
+                    right_max = height[right];
+                } else {
+                    ans += (right_max - height[right]);
+                }
+                --right;
+            }
+        }
+        return ans;
+    }
+
 
     public int countInversions(ArrayList<Integer> A) {
         int low = 0, high = A.size() - 1;

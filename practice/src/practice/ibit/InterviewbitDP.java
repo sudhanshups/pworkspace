@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class InterviewbitDP {
 
@@ -36,8 +34,154 @@ public class InterviewbitDP {
 //        System.out.println(ibit.KthManhattanDistanceNeighbourhood(2, new ArrayList<>(Arrays.asList(a, b))));
 
 //        System.out.println(ibit.CoinsInLine(new ArrayList<>(Arrays.asList(1, 2, 3, 4))));
-        System.out.println(ibit.countParenth("T&T|F"));
-        
+//        System.out.println(ibit.countParenth("T&T|F"));
+
+/*        ArrayList<Integer> list1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(2, 3, 4, 5));
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        lists.add(list1);
+        lists.add(list2);
+        System.out.println(ibit.MaxSumWithoutAdjacentElements(lists));*/
+        System.out.println(ibit.findSubsequenceCount("banana","ban"));
+
+        System.out.println(ibit.InterleavingStrings("USfMSU", "5YgZ9N5mR6ppfggzbzh7HTox85MwFtaIQDHfzJW8vc2G", "5YgUSZf9NM5SmR6Uppfggzbzh7HTox84MwFtaIQDHfzJW8vc2G"));
+
+    }
+
+    int InterleavingStrings(String A, String B, String C) {
+        int m = A.length();
+        int n = B.length();
+        if (m + n != C.length())
+            return 0;
+        boolean[][] dp = new boolean[m + 1][n + 1];
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0 && j == 0) {
+                    dp[i][j] = true;
+                } else if (i == 0) {
+                    if (B.charAt(j - 1) == C.charAt(j - 1)) {
+                        dp[i][j] = dp[i][j - 1];
+                    }
+                } else if (j == 0) {
+                    if (A.charAt(i - 1) == C.charAt(i - 1)) {
+                        dp[i][j] = dp[i - 1][j];
+                    }
+                }
+                // Current character of C matches with current character of A,
+                // but doesn't match with current character of B
+                else if (A.charAt(i - 1) == C.charAt(i + j - 1) && B.charAt(j - 1) != C.charAt(i + j - 1)) {
+                    dp[i][j] = dp[i - 1][j];
+                } else if (A.charAt(i - 1) != C.charAt(i + j - 1) && B.charAt(j - 1) == C.charAt(i + j - 1)) {
+                    dp[i][j] = dp[i][j - 1];
+                }else if(A.charAt(i - 1) == C.charAt(i + j - 1) && B.charAt(j - 1) == C.charAt(i + j - 1) ){
+                    //matching with last of A and last of B
+                    dp[i][j] = dp[i - 1][j]||dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m][n]?1:0;
+    }
+
+
+    int findSubsequenceCount(String S, String T) {
+        int n = S.length();
+        int m = T.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (T.charAt(i - 1) != S.charAt(j - 1)) {
+                    dp[i][j] = dp[i][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+
+    int longestIncreasingSubSequence(ArrayList<Integer> A) {
+        int[] arr = new int[A.size()];
+        Arrays.fill(arr, 1);
+        int max = 1;
+        for (int i = 1; i < A.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (A.get(j) < A.get(i) && arr[j] + 1 > arr[i]) {
+                    arr[i] = arr[j] + 1;
+                }
+                max = Math.max(max, arr[i]);
+            }
+        }
+
+        return max;
+    }
+
+    int LongestRepeatedSubsequence(String a) {
+        String b = a;
+        int[][] dp = new int[a.length() + 1][b.length() + 1];
+        for (int i = 1; i <= a.length(); i++) {
+            for (int j = 1; j <= b.length(); j++) {
+                if (a.charAt(i - 1) == b.charAt(j - 1) && i != j) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[a.length()][b.length()];
+    }
+
+    int LongestCommonSubsequence(String a, String b) {
+        int[][] dp = new int[a.length() + 1][b.length() + 1];
+        for (int i = 1; i <= a.length(); i++) {
+            for (int j = 1; j <= b.length(); j++) {
+                if (a.charAt(i - 1) == b.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[a.length()][b.length()];
+    }
+
+    int editDistance(String a, String b) {
+        int[][] dp = new int[a.length() + 1][b.length() + 1];
+        for (int i = 0; i <= a.length(); i++) {
+            for (int j = 0; j <= b.length(); j++) {
+                if (i == 0) { //insert
+                    dp[i][j] = j;
+                } else if (j == 0) {//remove
+                    dp[i][j] = i;
+                } else if (a.charAt(i - 1) == b.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(Math.min(dp[i - 1][j - 1], dp[i][j - 1]), dp[i - 1][j]);
+                }
+            }
+        }
+        return dp[a.length()][b.length()];
+    }
+
+    //2 rows, we first converting it to once row
+    int MaxSumWithoutAdjacentElements(ArrayList<ArrayList<Integer>> arr) {
+        int[] maxArr = new int[arr.get(0).size()];
+        for (int i = 0; i < arr.get(0).size(); i++) {
+            maxArr[i] = Math.max(arr.get(0).get(i), arr.get(1).get(i));
+        }
+        int incl = maxArr[0];
+        int excl = 0;
+        int excl_new;
+        for (int i = 1; i < maxArr.length; i++) {
+            excl_new = (incl > excl) ? incl : excl;
+            incl = excl + maxArr[i];
+            excl = excl_new;
+        }
+        return Math.max(incl, excl);
     }
 
     int countParenth(String A) {

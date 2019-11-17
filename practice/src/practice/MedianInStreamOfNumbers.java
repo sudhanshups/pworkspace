@@ -19,37 +19,12 @@ public class MedianInStreamOfNumbers {
 
         for (int i = 0; i < t; i++) {
             int num = sc.nextInt();
-            if (maxHeap.isEmpty()) {
-                maxHeap.add(num);
-            } else {
-                int temp = maxHeap.poll();
-                //max heap will always have more or equall number of element
-                if (num < temp) {
-                    maxHeap.add(num);
-                } else {
-                    maxHeap.add(temp);
-                    temp = num;
-                }
-
-                if (minHeap.size() < maxHeap.size()) {
-                    minHeap.add(temp);
-                } else if (minHeap.peek()<temp){
-                    num=minHeap.poll();
-                    minHeap.add(temp);
-                    maxHeap.add(num);
-                }else{
-                    maxHeap.add(temp);
-                }
+            maxHeap.add(num);
+            minHeap.add(maxHeap.poll());
+            if (maxHeap.size() < minHeap.size()) {                     // maintain size property
+                maxHeap.add(minHeap.poll());
             }
-            if (minHeap.size() < maxHeap.size()) {
-                //System.out.println(i + " - median " + maxHeap.peek() * 1.0);
-                System.out.println(maxHeap.peek());
-
-            } else {
-                //System.out.println(i + " - median " + (maxHeap.peek() + minHeap.peek()) / 2.0);
-                System.out.println((maxHeap.peek() + minHeap.peek()) / 2.0);
-            }
-
+            System.out.println(maxHeap.size() > minHeap.size() ? (double) maxHeap.peek() : (maxHeap.peek() + minHeap.peek()) * 0.5);
         }
     }
 
