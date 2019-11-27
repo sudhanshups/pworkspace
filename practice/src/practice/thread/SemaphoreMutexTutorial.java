@@ -24,7 +24,7 @@ public class SemaphoreMutexTutorial {
                     
                     mutex.acquire();
                     List.add(threadName);
-                    System.out.println("Producer is prdoucing new value: " + threadName);
+                    System.out.println("Producer is producing new value: " + threadName);
                     mutex.release();
                     
                     // release lock

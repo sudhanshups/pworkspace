@@ -1501,6 +1501,8 @@ public class CF473_1 {
 
     public static ArrayList<Interval> mergeOverlappingInterval(ArrayList<Interval> intervals) {
         Collections.sort(intervals, (o1, o2) -> (o1.start - o2.start));
+//      Collections.sort(intervals, Comparator.comparingInt(a -> a.start));
+
         ArrayList<Interval> result = new ArrayList<>();
 
         Stack<Interval> stack = new Stack<>();
@@ -1522,6 +1524,24 @@ public class CF473_1 {
             result.add(stack.pop());
         }
         Collections.reverse(result);
+        return result;
+    }
+
+    //insert one interval in sorted intervals
+    public ArrayList<Interval> insert(ArrayList<Interval> intervals, Interval newInterval) {
+        ArrayList<Interval> result = new ArrayList<Interval>();
+        for(Interval interval: intervals){
+            if(interval.end < newInterval.start){
+                result.add(interval);
+            }else if(interval.start > newInterval.end){
+                result.add(newInterval);
+                newInterval = interval;
+            }else if(interval.end >= newInterval.start || interval.start <= newInterval.end){
+                newInterval = new Interval(Math.min(interval.start, newInterval.start), Math.max(newInterval.end, interval.end));
+            }
+        }
+
+        result.add(newInterval);
         return result;
     }
 

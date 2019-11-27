@@ -41,7 +41,7 @@ class Number implements Runnable {
             }
             notify();//notify any one of the waiting thread on this object as method is synchronized, so this object is locked.
             try {
-                Thread.sleep(1);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

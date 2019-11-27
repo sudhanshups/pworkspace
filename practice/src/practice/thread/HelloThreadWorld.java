@@ -23,7 +23,7 @@ public class HelloThreadWorld {
         (new HelloThread()).start();
 
 
-        // thread join & inturupt
+        // thread join & interrupt
         // Delay, in milliseconds before
         // we interrupt MessageLoop
         // thread (default one hour).

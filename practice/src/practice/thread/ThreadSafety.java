@@ -20,12 +20,12 @@ public class ThreadSafety {
 
 class ProcessingThread implements Runnable{
     private int count;
-    private Object lock = new Object();  // thread seafty 
+    private Object lock = new Object();  // thread safety
     @Override
     public void run() {
         for(int i=1; i < 5; i++){
             processSomething(i);
-            synchronized(lock){  // thread seafty 
+            synchronized(lock){  // thread safety
             	count++;
             	System.out.println(this.toString() +" "+
                     	count +" "+Thread.currentThread().getName());

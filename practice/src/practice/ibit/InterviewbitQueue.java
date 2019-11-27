@@ -29,11 +29,31 @@ public class InterviewbitQueue {
        /* ArrayList<String> A = new ArrayList<>(Arrays.asList("2", "1", "+", "3", "*"));
         System.out.println(ibit.evaluateReversePolish(A));*/
 
-        ArrayList<Integer> A = new ArrayList<>(Arrays.asList(34, 35, 27, 42, 5, 28, 39, 20, 28));
-        System.out.println(ibit.nextGreater(A));
+        //ArrayList<Integer> A = new ArrayList<>(Arrays.asList(34, 35, 27, 42, 5, 28, 39, 20, 28));
+        //System.out.println(ibit.nextGreater(A));
         //35 42 42 -1 28 39 -1 28 -1
+
+        int[][] arr = new int[][]{{7, 0}, {4, 4}, {7, 1}, {5, 0}, {6, 1}, {5, 2}};
+
+        System.out.println(ibit.reconstructQueue(arr));
     }
 
+    //input [[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+    //output [[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people, (o1, o2) -> {
+            // if the heights are equal, compare k-values
+            return o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0];
+        });
+
+        List<int[]> output = new LinkedList<>();
+        for (int[] p : people) {
+            output.add(p[1], p);
+        }
+
+        int n = people.length;
+        return output.toArray(new int[n][2]);
+    }
 
     public ArrayList<Integer> nextGreater(ArrayList<Integer> A) {
         int[] res = new int[A.size()];

@@ -27,7 +27,7 @@ public class InteruptThreadTest {
         // main thread calls interrupt() method on
         // child thread
         thread.interrupt();
-
+        Thread.sleep(1000);
         System.out.println("Main thread execution completes");
     }
 }

@@ -47,5 +47,7 @@ class B {
         OnGeekEventListener mListener = new A();
         obj.registerOnGeekEventListener(mListener);
         obj.doGeekStuff();
+        System.out.println("abd");
+
     }
 }

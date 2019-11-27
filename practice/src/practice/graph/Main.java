@@ -1,6 +1,5 @@
 package practice.graph;
 
-import java.io.IOException;
 import java.util.*;
 
 class Graph {
@@ -222,7 +221,7 @@ class Graph {
     void topologicalSort() {
         Stack stack = new Stack();
 
-        boolean visited[] = new boolean[V];
+        boolean[] visited = new boolean[V];
         for (int i = 0; i < V; i++)
             visited[i] = false;
 

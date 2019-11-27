@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 // Class which has two locks and two methods.
 class TestResource {
 /*    displayQueueLock is created to make
-    displayQueueLock thread safe. When T1 aquires lock on testresource(o1)
+    displayQueueLock thread safe. When T1 acquires lock on testresource(o1)
     object displayRecord method T2 has to wait for lock to be released
     by T1 on testresource(o1) object displayRecord method. But T3, can execute
     readRecord method with out waiting for lock
