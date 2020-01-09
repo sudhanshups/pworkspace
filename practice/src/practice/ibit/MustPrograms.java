@@ -1,4 +1,4 @@
-package practice.comp;
+package practice.ibit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -71,7 +71,7 @@ class MatrixMedianComparator implements Comparator<MatrixMedian> {
     }
 }
 
-public class CF473_1 {
+public class MustPrograms {
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -1300,7 +1300,7 @@ public class CF473_1 {
         return arr[A][B];
     }
 
-    public static ArrayList<Integer> rearangeArray(ArrayList<Integer> A) {
+    public static ArrayList<Integer> rearrangeArray(ArrayList<Integer> A) {
         for (int i = 0; i < A.size(); i++)
             A.set(i, A.get(i) + (A.get(A.get(i)) % A.size()) * A.size());
         for (int i = 0; i < A.size(); i++)
@@ -1435,7 +1435,8 @@ public class CF473_1 {
                 minLength = j + 1;
             }
         } else {
-            if ((commulativeOnces[j] - commulativeOnces[i]) >= KVal && minLength >= (commulativeOnces[j] - commulativeOnces[i])) {
+            if ((commulativeOnces[j] - commulativeOnces[i]) >= KVal
+                    && minLength >= (commulativeOnces[j] - commulativeOnces[i])) {
                 minLength = j - i + 1;
             }
         }
@@ -1499,6 +1500,7 @@ public class CF473_1 {
         return max;
     }
 
+    //merge Overlapping Interval
     public static ArrayList<Interval> mergeOverlappingInterval(ArrayList<Interval> intervals) {
         Collections.sort(intervals, (o1, o2) -> (o1.start - o2.start));
 //      Collections.sort(intervals, Comparator.comparingInt(a -> a.start));
@@ -1545,7 +1547,7 @@ public class CF473_1 {
         return result;
     }
 
-    public static ArrayList<ArrayList<Integer>> pascalTrianle(int n) {
+    public static ArrayList<ArrayList<Integer>> pascalTriangle(int n) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         int i, j;
         for (i = 0; i < n; i++) {
@@ -1715,6 +1717,7 @@ public class CF473_1 {
         return 0;
     }
 
+    //todo sudhanshu
     public static int maxSpecialProduct(ArrayList<Integer> A) {
         /*
         ArrayList<Integer> A = new ArrayList<>(Arrays.asList(0,4,2,3));

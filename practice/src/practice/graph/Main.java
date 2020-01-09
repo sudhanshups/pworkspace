@@ -120,6 +120,21 @@ class Graph {
         return false;
     }
 
+    // check if an undirected graph has cycle started from vertex u
+    // hasCycle(adjList, 0, visited, -1)
+    boolean hasCycle(List<List<Integer>> adjList, int u, boolean[] visited, int parent) {
+        visited[u] = true;
+
+        for (int i = 0; i < adjList.get(u).size(); i++) {
+            int v = adjList.get(u).get(i);
+
+            if ((visited[v] && parent != v) || (!visited[v] && hasCycle(adjList, v, visited, u)))
+                return true;
+        }
+
+        return false;
+    }
+
     void printLevel(int source) {
         boolean[] visited = new boolean[V];
         int[] level = new int[V];
@@ -204,7 +219,7 @@ class Graph {
         return res;
     }
 
-    void topologicalSortUtil(int v, boolean visited[], Stack stack) {
+    void topologicalSortUtil(int v, boolean visited[], Stack<Integer> stack) {
         visited[v] = true;
 
         List<Integer> neighbours = adj.get(v);
@@ -219,7 +234,7 @@ class Graph {
     // another simpler way- use queue starting from 0 degree vertex,
     // reduce in-degree of neighbour, save in topological array keep repeating
     void topologicalSort() {
-        Stack stack = new Stack();
+        Stack<Integer> stack = new Stack<>();
 
         boolean[] visited = new boolean[V];
         for (int i = 0; i < V; i++)

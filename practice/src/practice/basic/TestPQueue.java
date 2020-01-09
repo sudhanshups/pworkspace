@@ -8,8 +8,7 @@ public class TestPQueue
     public static void main(String args[])
     {
         // Creating empty priority queue
-        Queue<String> pQueue =
-                          new PriorityQueue<String>();
+        Queue<String> pQueue = new PriorityQueue<String>();
  
         // Adding items to the pQueue
         pQueue.add("C++");
@@ -20,7 +19,7 @@ public class TestPQueue
  
         // Printing the most priority element
         System.out.println("Head value using peek function:"
-                                           + pQueue.peek());
+                + pQueue.peek());
  
         // Printing all elements
         System.out.println("The queue elements:");

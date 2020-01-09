@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Interviewbitbacktracking {
 
@@ -45,7 +44,7 @@ public class Interviewbitbacktracking {
 
         //System.out.println(ibit.grayCode(3));
 
-        ArrayList<ArrayList<Character>> a = new ArrayList<>();
+        /*ArrayList<ArrayList<Character>> a = new ArrayList<>();
         a.add(new ArrayList<>("53..7....".chars().mapToObj(e -> (char) e).collect(Collectors.toList())));
         a.add(new ArrayList<>("6..195...".chars().mapToObj(e -> (char) e).collect(Collectors.toList())));
         a.add(new ArrayList<>(".98....6.".chars().mapToObj(e -> (char) e).collect(Collectors.toList())));
@@ -57,9 +56,47 @@ public class Interviewbitbacktracking {
         a.add(new ArrayList<>("....8..79".chars().mapToObj(e -> (char) e).collect(Collectors.toList())));
 
         ibit.solveSudoku(a);
-        System.out.println(a);
+        System.out.println(a);*/
+        System.out.println(ibit.transferBananas(3000, 1000, 1000, 1));
 
 
+
+    }
+
+    //elephant and banana
+    double transferBananas(double totalBanana, double remainingDistance, double maxToCarry, double eatBananaPerKm) {
+    // base case: remaining bananas <= maxToCarry,
+    // so carry all the bananas in one trip
+    // at this point if distance is more than totalBanana/eatBananaPerKm,
+    // elephant can never reach destination, return 0
+        if (totalBanana <= maxToCarry) {
+            double bananasAtDestination = totalBanana - remainingDistance * eatBananaPerKm;
+            return Math.max(bananasAtDestination, 0.0);    // out of bananas!
+        }
+
+    // # trips you would travel back and forth
+        int numTrips = 2 * (int) (Math.ceil(totalBanana / maxToCarry) - 1) + 1;
+
+    // how many bananas you consume per km
+        double costPerKm = numTrips * eatBananaPerKm;
+
+    // remaining number of bananas after consumption, we want it
+    // as an integer multiple of maxToCarry.
+        double remainingBananas = maxToCarry * (int) (Math.ceil(totalBanana / maxToCarry) - 1.0);
+
+    // this is the distance you are able to travel before you
+    // reach ONE LESS round trip fetching bananas
+    // derived from eq: totalBanana - costPerKm * traveled = remaining bananas
+
+        double traveled = (totalBanana - remainingBananas) / costPerKm;
+
+    // we are able to travel greater (or equal) than the remaining
+    // distance, so fetch the bananas right to the destination
+        if (traveled >= remainingDistance)
+            return totalBanana - remainingDistance * costPerKm;
+
+    // calculate recursively as we travel ONE less round trip now.
+        return transferBananas(remainingBananas, remainingDistance - traveled, maxToCarry, eatBananaPerKm);
     }
 
 

@@ -23,6 +23,59 @@ public class InterviewbitGreedy {
 
         System.out.println(ibit.GasStation(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)),
                 new ArrayList<>(Arrays.asList(3, 4, 5, 1, 2))));
+        System.out.println(ibit.calculateMinimumHP(new int[][]{{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}}));
+
+    }
+
+    public int calculateMinimumHP(int[][] dungeon) {
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        int[][] grid = new int[m][n];
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0) {
+                    grid[i][j] = dungeon[i][j];
+                } else if (i == 0) {
+                    grid[i][j] += dungeon[i][j - 1];
+                } else if (j == 0) {
+                    grid[i][j] += dungeon[i - 1][j];
+                } else {
+                    grid[i][j] += Math.max(dungeon[i - 1][j], dungeon[i][j - 1]);
+                }
+            }
+        }
+        //get the path
+        return 0;
+    }
+
+    public int uniquePaths(int m, int n) {
+        int[][] grid = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    grid[i][j] = 1;
+                } else {
+                    grid[i][j] = grid[i - 1][j] + grid[i][j - 1];
+                }
+            }
+        }
+        return grid[m - 1][n - 1];
+    }
+
+    public boolean carPooling(int[][] trips, int capacity) {
+        int[] arr = new int[1002];
+        for (int[] trip : trips) {
+            arr[trip[1]] += trip[0];
+            arr[trip[2]] -= trip[0];
+        }
+        for (int i = 1; i < 1002; i++) {
+            arr[i] += arr[i - 1];
+            if (arr[i] > capacity) {
+                return false;
+            }
+        }
+        return true;
     }
 
     int GasStation(ArrayList<Integer> gas, ArrayList<Integer> cost) {
@@ -34,15 +87,15 @@ public class InterviewbitGreedy {
             int extraFuel = gas.get(i) - cost.get(i);
             if (fuelRemaining >= 0) {
                 fuelRemaining += extraFuel;
-            }else{
+            } else {
                 fuelRemaining = extraFuel;
-                start=i;
+                start = i;
             }
-            totalFuel +=extraFuel;
+            totalFuel += extraFuel;
         }
-        if(totalFuel>=0){
+        if (totalFuel >= 0) {
             return start;
-        }else {
+        } else {
             return -1;
         }
     }

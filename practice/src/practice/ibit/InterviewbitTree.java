@@ -106,9 +106,106 @@ public class InterviewbitTree {
 /*        root1.left.right = new TreeNode(3);
         root1.left.right.left = new TreeNode(5);
         root1.left.right.right = new TreeNode(7);*/
-        System.out.println(ibit.distributeCoins(root2));
-        System.out.println();
+        //System.out.println(ibit.distributeCoins(root2));
+        //System.out.println();
+
+        TreeNode root3 = new TreeNode(1);
+        root3.right = new TreeNode(3);
+        root3.right.left = new TreeNode(4);
+        root3.right.right = new TreeNode(4);
+        root3.right.right.right = new TreeNode(5);
+        System.out.println(ibit.longestConsecutiveParentTOChildPath(root3));
+
     }
+
+    //serialize a tree
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "null";
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        StringBuilder result = new StringBuilder();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode current = queue.poll();
+                if (current == null) {
+                    result.append("null,");
+                    continue;
+                }
+                result.append(current.val).append(",");
+                queue.offer(current.left);
+                queue.offer(current.right);
+            }
+        }
+        System.out.println(result);
+        return result.toString();
+    }
+
+    //deserialize a tree Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] nodes = data.split(",");
+        int index = 0;
+        if (nodes[index].equals("null")) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[index++]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode current = queue.poll();
+                if (!nodes[index].equals("null")) {
+                    current.left = new TreeNode(Integer.parseInt(nodes[index]));
+                    queue.offer(current.left);
+                }
+                index++;
+                if (!nodes[index].equals("null")) {
+                    current.right = new TreeNode(Integer.parseInt(nodes[index]));
+                    queue.offer(current.right);
+                }
+                index++;
+            }
+        }
+        return root;
+    }
+
+    List<Integer> longestConsecutiveParentTOChildPath(TreeNode root) {
+        List<Integer> path = longestConsecutiveParentTOChildPathUtil(root, new ArrayList<>());
+        return path;
+
+    }
+
+    private List<Integer> longestConsecutiveParentTOChildPathUtil(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return result;
+        }
+
+        List<Integer> left;
+        List<Integer> right;
+        if (result.size() == 0) {
+            result.add(root.val);
+            left = longestConsecutiveParentTOChildPathUtil(root.left, new ArrayList<>(result));
+            right = longestConsecutiveParentTOChildPathUtil(root.right, new ArrayList<>(result));
+        } else {
+            if (result.get(result.size() - 1) + 1 == root.val) {
+                result.add(root.val);
+                left = longestConsecutiveParentTOChildPathUtil(root.left, new ArrayList<>(result));
+                right = longestConsecutiveParentTOChildPathUtil(root.right, new ArrayList<>(result));
+            } else {
+                List<Integer> newResult = new ArrayList<>();
+                newResult.add(root.val);
+                left = longestConsecutiveParentTOChildPathUtil(root.left, new ArrayList<>(newResult));
+                right = longestConsecutiveParentTOChildPathUtil(root.right, new ArrayList<>(newResult));
+            }
+        }
+        if (left.size() >= right.size())
+            return left;
+        return right;
+    }
+
 
     class Moves {
         int ans = 0;

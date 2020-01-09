@@ -42,15 +42,345 @@ public class InterviewbitDP {
         lists.add(list1);
         lists.add(list2);
         System.out.println(ibit.MaxSumWithoutAdjacentElements(lists));*/
-        System.out.println(ibit.findSubsequenceCount("banana","ban"));
+        //System.out.println(ibit.findSubsequenceCount("banana","ban"));
 
-        System.out.println(ibit.InterleavingStrings("USfMSU", "5YgZ9N5mR6ppfggzbzh7HTox85MwFtaIQDHfzJW8vc2G", "5YgUSZf9NM5SmR6Uppfggzbzh7HTox84MwFtaIQDHfzJW8vc2G"));
+        //System.out.println(ibit.InterleavingStrings("USfMSU", "5YgZ9N5mR6ppfggzbzh7HTox85MwFtaIQDHfzJW8vc2G", "5YgUSZf9NM5SmR6Uppfggzbzh7HTox84MwFtaIQDHfzJW8vc2G"));
+
+        //System.out.println(ibit.maxCoins(new int[]{1, 2}));
+
+//      ibit.printAllSubsets(new int[]{1, 2, 3, 4, 5}, 5, 10);
+
+        /*List<List<Integer>> lists = new ArrayList<>();
+        lists.add(new ArrayList<>(Arrays.asList(-1)));
+        lists.add(new ArrayList<>(Arrays.asList(3, 2)));
+        System.out.println(ibit.minimumTotalInTriangle(lists));
+*/
+/*        System.out.println(ibit.MaxLengthSnake(new int[][]{{9, 6, 5, 2},
+                {8, 7, 6, 5},
+                {7, 3, 1, 6},
+                {1, 1, 1, 7}}));*/
+
+       /* ibit.maxRectangleWith0Sum(new int[][]{{1, 2, 3},
+                {-3, -2, -1},
+                {1, 7, 5}}, 3, 3);*/
+
+/*        int M[][] = {{0, 1, 1, 0, 1},
+                {1, 1, 0, 1, 0},
+                {1, 1, 1, 1, 0},
+                {1, 1, 1, 1, 0},
+                {1, 1, 1, 1, 1},
+                {0, 0, 0, 0, 0}};
+        printMaxSubSquare(M);*/
+        System.out.println("Maximum area is " + maxHistogramArea(new int[]{6, 2, 5, 4, 5, 1, 6}, 7));
 
     }
 
+    static int maxHistogramArea(int input[], int n) {
+        // Create an empty stack. The stack holds indexes of
+        // hist[] array/ The bars stored in stack are always
+        // in increasing order of their heights.
+        Stack<Integer> stack = new Stack<>();
+        int top_val;     // Top of stack
+        int max_area = 0;
+        int area = 0;    // Initialize area with current top
+        // Run through all bars of given histogram (or row)
+        int i = 0;
+        while (i < n) {
+            // If this bar is higher than the bar on top stack,
+            // push it to stack
+            if (stack.empty() || input[stack.peek()] <= input[i])
+                stack.push(i++);
+
+            else {
+                // If this bar is lower than top of stack, then
+                // calculate area of rectangle with stack top as
+                // the smallest (or minimum height) bar. 'i' is
+                // 'right index' for the top and element before
+                // top in stack is 'left index'
+                top_val = input[stack.peek()];
+                stack.pop();
+                if (!stack.empty())
+                    area = top_val * (i - stack.peek() - 1);
+                else
+                    area = top_val * i;
+                max_area = Math.max(area, max_area);
+            }
+        }
+
+        // Now pop the remaining bars from stack and calculate
+        // area with every popped bar as the smallest bar
+        while (!stack.empty()) {
+
+            top_val = input[stack.peek()];
+            stack.pop();
+            if (!stack.empty())
+                area = top_val * (i - stack.peek() - 1);
+            else
+                area = top_val * i;
+            max_area = Math.max(area, max_area);
+
+        }
+        return max_area;
+    }
+
+    static void printMaxSubSquare(int M[][]) {
+        int i, j;
+        int R = M.length;         //no of rows in M[][]
+        int C = M[0].length;     //no of columns in M[][]
+        int S[][] = new int[R][C];
+
+        int max_of_s, max_i, max_j;
+
+        for (i = 0; i < R; i++)
+            S[i][0] = M[i][0];
+        for (j = 0; j < C; j++)
+            S[0][j] = M[0][j];
+
+        for (i = 1; i < R; i++) {
+            for (j = 1; j < C; j++) {
+                if (M[i][j] == 1)
+                    S[i][j] = Math.min(S[i][j - 1],
+                            Math.min(S[i - 1][j], S[i - 1][j - 1])) + 1;
+                else
+                    S[i][j] = 0;
+            }
+        }
+        max_of_s = S[0][0];
+        max_i = 0;
+        max_j = 0;
+        for (i = 0; i < R; i++) {
+            for (j = 0; j < C; j++) {
+                if (max_of_s < S[i][j]) {
+                    max_of_s = S[i][j];
+                    max_i = i;
+                    max_j = j;
+                }
+            }
+        }
+
+        System.out.println("Maximum size sub-matrix is: ");
+        for (i = max_i; i > max_i - max_of_s; i--) {
+            for (j = max_j; j > max_j - max_of_s; j--) {
+                System.out.print(M[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void maxRectangleWith0Sum(int arr[][], int row, int col) {
+        int temp[] = new int[row];
+        // Variables to store the final output
+        int fup = 0, fdown = 0, fleft = 0, fright = 0;
+        int up = 0, down = 0;
+        int startEnd[] = new int[2];
+        int maxl = Integer.MIN_VALUE;
+
+        for (int left = 0; left < col; left++) {
+            for (int i = 0; i < row; i++)
+                temp[i] = 0;
+
+            for (int right = left; right < col; right++) {
+                // Calculate sum between current left and right for every row 'i'
+                for (int i = 0; i < row; i++)
+                    temp[i] += arr[i][right];
+
+                // Find largest subarray with 0 sum in temp[]. The sumZero() function also sets values of start and finish.
+                boolean sum = sumZero(temp, startEnd, row);
+                up = startEnd[0];
+                down = startEnd[1];
+                int ele = (down - up + 1) * (right - left + 1);
+
+                if (sum && ele > maxl) {
+                    fup = up;
+                    fdown = down;
+                    fleft = left;
+                    fright = right;
+                    maxl = ele;
+                }
+            }
+        }
+
+        // If there is no change in boundaries
+        // than check if a[0][0] is 0
+        // If it not zero then print
+        // that no such zero-sum sub-matrix exists
+        if (fup == 0 && fdown == 0 && fleft == 0 && fright == 0 && arr[0][0] != 0) {
+            System.out.print("No zero-sum sub-matrix exists");
+        }
+
+        for (int j = fup; j <= fdown; j++) {
+            for (int i = fleft; i <= fright; i++)
+                System.out.print(arr[j][i] + " ");
+            System.out.println();
+        }
+    }
+
+    private boolean sumZero(int temp[], int[] startEnd, int n) {
+        Map<Integer, Integer> presum = new HashMap<>();
+        int sum = 0;
+        int max_length = 0;
+
+        for (int i = 0; i < n; i++) {
+            sum += temp[i];
+            if (temp[i] == 0 && max_length == 0) {
+                startEnd[0] = i;
+                startEnd[1] = i;
+                max_length = 1;
+            }
+            if (sum == 0) {
+                if (max_length < i + 1) {
+                    startEnd[0] = 0;
+                    startEnd[1] = i;
+                }
+                max_length = i + 1;
+            }
+
+            if (presum.get(sum) != null) {
+                int old = max_length;
+                max_length = Math.max(max_length, i - presum.get(sum));
+
+                if (old < max_length) {
+                    // If max_length is updated then enter and update start and end point of array
+                    startEnd[0] = presum.get(sum) + 1;
+                    startEnd[1] = i;
+                }
+            } else
+                presum.put(sum, i);
+        }
+        // Return true if max_length is non-zero
+        return (max_length != 0);
+    }
+
+    public int MaxLengthSnake(int[][] grid) {
+        int[][] res = new int[grid.length][grid[0].length];
+        int ans = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                int l = 1;
+                if (i == 0 && j == 0) {
+                    l = Math.max(1, l);
+                } else if (i == 0 || (j != 0 && Math.abs(grid[i][j - 1] - grid[i][j]) == 1)) {
+                    l = Math.max(res[i][j - 1] + 1, l);
+                } else if (j == 0 || (i != 0 && Math.abs(grid[i][j] - grid[i - 1][j]) == 1)) {
+                    l = Math.max(res[i - 1][j] + 1, l);
+                }
+                res[i][j] = l;
+                ans = Math.max(l, ans);
+            }
+        }
+        return ans;
+    }
+
+    public int minimumTotalInTriangle(List<List<Integer>> triangle) {
+        for (int i = triangle.size() - 2; i >= 0; i--) {
+            for (int j = 0; j < triangle.get(i).size(); j++) {
+                //int pre = j == 0 ? Integer.MAX_VALUE : triangle.get(i + 1).get(j - 1);
+                int cur = triangle.get(i + 1).get(j);
+                int next = j == triangle.get(i + 1).size() - 1 ? Integer.MAX_VALUE : triangle.get(i + 1).get(j + 1);
+                triangle.get(i).set(j, triangle.get(i).get(j) + Math.min(Math.min(next, cur), next));
+            }
+        }
+        return triangle.get(0).get(0);
+    }
+
+
+    // A Java program to count all subsets with given sum.
+    // dp[i][j] is going to store true if sum j is possible with array elements from 0 to i.
+    static boolean[][] dp;
+
+    static void display(ArrayList<Integer> v) {
+        System.out.println(v);
+    }
+
+    // A recursive function to print all subsets with the help of dp[][]. Vector p[] stores current subset.
+    private void printSubsetsRec(int arr[], int i, int sum, ArrayList<Integer> p) {
+        // If we reached end and sum is non-zero. We print
+        // p[] only if arr[0] is equal to sun OR dp[0][sum] is true.
+        if (i == 0 && sum != 0 && dp[0][sum]) {
+            p.add(arr[i]);
+            display(p);
+            p.clear();
+            return;
+        }
+
+        // If sum becomes 0
+        if (i == 0 && sum == 0) {
+            display(p);
+            p.clear();
+            return;
+        }
+
+        // If given sum can be achieved after ignoring current element.
+        if (dp[i - 1][sum]) {// Create a new vector to store path
+            ArrayList<Integer> b = new ArrayList<>();
+            b.addAll(p);
+            printSubsetsRec(arr, i - 1, sum, b);
+        }
+
+        // If given sum can be achieved after considering current element.
+        if (sum >= arr[i] && dp[i - 1][sum - arr[i]]) {
+            p.add(arr[i]);
+            printSubsetsRec(arr, i - 1, sum - arr[i], p);
+        }
+    }
+
+    // Prints all subsets of arr[0..n-1] with sum 0.
+    void printAllSubsets(int arr[], int n, int sum) {
+        if (n == 0 || sum < 0)
+            return;
+
+        // Sum 0 can always be achieved with 0 elements
+        dp = new boolean[n][sum + 1];
+        for (int i = 0; i < n; ++i) {
+            dp[i][0] = true;
+        }
+
+        // Sum arr[0] can be achieved with single element
+        if (arr[0] <= sum)
+            dp[0][arr[0]] = true;
+
+        // Fill rest of the entries in dp[][]
+        for (int i = 1; i < n; ++i)
+            for (int j = 0; j < sum + 1; ++j)
+                dp[i][j] = (arr[i] <= j) ? (dp[i - 1][j] ||
+                        dp[i - 1][j - arr[i]])
+                        : dp[i - 1][j];
+        if (dp[n - 1][sum] == false) {
+            System.out.println("There are no subsets with" +
+                    " sum " + sum);
+            return;
+        }
+
+        // Now recursively traverse dp[][] to find all
+        // paths from dp[n-1][sum]
+        ArrayList<Integer> p = new ArrayList<>();
+        printSubsetsRec(arr, n - 1, sum, p);
+    }
+
+    //evelynn.gitbooks.io/google-interview/burst_balloons.html
+    public int maxCoins(int[] iNums) {
+        int[] nums = new int[iNums.length + 2];
+        int n = 1;
+        for (int x : iNums) if (x > 0) nums[n++] = x;
+        nums[0] = nums[n++] = 1;
+
+
+        int[][] memo = new int[n][n];
+        return burst(memo, nums, 0, n - 1);
+    }
+
+    public int burst(int[][] memo, int[] nums, int left, int right) {
+        if (left + 1 == right) return 0;
+        if (memo[left][right] > 0) return memo[left][right];
+        int ans = 0;
+        for (int i = left + 1; i < right; ++i)
+            ans = Math.max(ans, nums[left] * nums[i] * nums[right]
+                    + burst(memo, nums, left, i) + burst(memo, nums, i, right));
+        memo[left][right] = ans;
+        return ans;
+    }
+
     //http://buttercola.blogspot.com/2016/01/leetcode-best-time-to-buy-and-sell.html
-
-
     int InterleavingStrings(String A, String B, String C) {
         int m = A.length();
         int n = B.length();
@@ -77,13 +407,13 @@ public class InterviewbitDP {
                     dp[i][j] = dp[i - 1][j];
                 } else if (A.charAt(i - 1) != C.charAt(i + j - 1) && B.charAt(j - 1) == C.charAt(i + j - 1)) {
                     dp[i][j] = dp[i][j - 1];
-                }else if(A.charAt(i - 1) == C.charAt(i + j - 1) && B.charAt(j - 1) == C.charAt(i + j - 1) ){
+                } else if (A.charAt(i - 1) == C.charAt(i + j - 1) && B.charAt(j - 1) == C.charAt(i + j - 1)) {
                     //matching with last of A and last of B
-                    dp[i][j] = dp[i - 1][j]||dp[i][j - 1];
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
                 }
             }
         }
-        return dp[m][n]?1:0;
+        return dp[m][n] ? 1 : 0;
     }
 
 

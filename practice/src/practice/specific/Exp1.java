@@ -15,7 +15,7 @@ class Graph {
             adj.add(new LinkedList<>());
     }
 
-    public void addEdge(int u, int v) {
+    public void addEdge(int  u, int v) {
         adj.get(u).add(v);
     }
 

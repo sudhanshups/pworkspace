@@ -114,11 +114,141 @@ public class InterviewbitGraph {
         ibit.CaptureRegionsonBoard(grid);
         System.out.println(grid);*/
 
-        System.out.println(ibit.SteppingNumbers(10, 20));
+        //System.out.println(ibit.SteppingNumbers(10, 20));
+        //System.out.println(ibit.SteppingNumbers(10, 20));
 
-        System.out.println(ibit.SteppingNumbers(10, 20));
+//        System.out.println(ibit.numIslands2(3, 3, new int[][]{{0, 0}, {0, 1}, {1, 2}, {2, 1}}));
+        //System.out.println(ibit.numIslands2(3, 3, new int[][]{{0, 0}, {0, 1}, {1, 2}, {1, 2}}));
+        System.out.println(ibit.numIslands2(3, 3, new int[][]{{0, 0}, {0, 1}, {1, 2}, {2, 1}, {1, 0}, {0, 0}, {2, 2}, {1, 2}, {1, 1}, {0, 1}}));//[1,1,2,3,3,3,2,2,1,1]
+        // System.out.println(ibit.numIslands2(3, 3, new int[][]{{0, 1}, {1, 2}, {2, 1}, {1, 0}, {0, 2}, {0, 0}, {1, 1}}));        //[1,2,3,4,3,2,1]
+
 
     }
+
+    /*
+    equations = [ ["a", "b"], ["b", "c"] ],
+values = [2.0, 3.0],
+queries = [ ["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"] ].
+
+Given a / b = 2.0, b / c = 3.0.
+queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? .
+return [6.0, 0.5, -1.0, 1.0, -1.0 ].
+ */
+    public double[] calcEquation(String[][] equations, double[] values, String[][] query) {
+
+        // map string to integer
+        Map<String, Integer> mIdTable = new HashMap<>();
+        int len = 0;
+        for (String[] words : equations)
+            for (String word : words)
+                if (!mIdTable.containsKey(word)) mIdTable.put(word, len++);
+
+        // init parent index and value
+        Node[] nodes = new Node[len];
+        for (int i = 0; i < len; ++i) nodes[i] = new Node(i);
+
+        // union, you can take an example as follows
+        // (a/b=3)->(c/d=6)->(b/d=12)
+        for (int i = 0; i < equations.length; ++i) {
+            String[] keys = equations[i];
+            int k1 = mIdTable.get(keys[0]);
+            int k2 = mIdTable.get(keys[1]);
+            int groupHead1 = find(nodes, k1);
+            int groupHead2 = find(nodes, k2);
+            nodes[groupHead2].parent = groupHead1;
+            nodes[groupHead2].value = nodes[k1].value * values[i] / nodes[k2].value;
+        }
+
+        // query now
+        double[] result = new double[query.length];
+        for (int i = 0; i < query.length; ++i) {
+            Integer k1 = mIdTable.get(query[i][0]);
+            Integer k2 = mIdTable.get(query[i][1]);
+            if (k1 == null || k2 == null) result[i] = -1d;
+            else {
+                int groupHead1 = find(nodes, k1);
+                int groupHead2 = find(nodes, k2);
+                if (groupHead1 != groupHead2) result[i] = -1d;
+                else result[i] = nodes[k2].value / nodes[k1].value;
+            }
+        }
+        return result;
+    }
+
+    public int find(Node[] nodes, int k) {
+        int p = k;
+        while (nodes[p].parent != p) {
+            p = nodes[p].parent;
+            // compress
+            nodes[k].value *= nodes[p].value;
+        }
+        // compress
+        nodes[k].parent = p;
+        return p;
+    }
+
+    private static class Node {
+        int parent;
+        double value;
+
+        public Node(int index) {
+            this.parent = index;
+            this.value = 1d;
+        }
+    }
+
+    //count no of island after getting each position
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> result = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        int iCount = 0;
+        int[][] adj = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] pos : positions) {
+            int x = pos[0];
+            int y = pos[1];
+            int idx = x * n + y;
+            //map.put(idx, idx);
+            if (!map.containsKey(idx)) {
+                map.put(idx, idx);
+                iCount++;
+                //process nearby island and see if it is merging
+                for (int[] near : adj) {
+                    int xn = near[0] + x;
+                    int yn = near[1] + y;
+                    int nIdx = xn * n + yn;
+                    if (xn < 0 || yn < 0 || xn >= m || yn >= n || !map.containsKey(nIdx)) {
+                        continue;
+                    }
+                    int parent1 = find(idx, map);
+                    int parent2 = find(nIdx, map);
+                    if (parent1 != parent2) {
+//                      map.put(Math.max(parent1, parent2),Math.min(parent1, parent2));
+                        map.put(parent1, parent2);
+                        iCount--;
+                    }
+                }
+            }
+            result.add(iCount);
+        }
+        return result;
+    }
+
+    int find(int x, Map<Integer, Integer> map) {
+        int father = x;
+        while (father != map.get(father)) {
+            father = map.get(father);
+
+        }
+        //compress
+        int temp;
+        while (x != map.get(x)) {
+            temp = map.get(x);
+            map.put(x, father);
+            x = temp;
+        }
+        return father;
+    }
+
 
     ArrayList<Integer> SteppingNumbers(int n, int m) {
         Queue<Integer> queue = new LinkedList<>();

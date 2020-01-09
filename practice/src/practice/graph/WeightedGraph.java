@@ -86,7 +86,7 @@ class WGraph {
     public void prims_mst() {
         class Node {
             int vertex;
-            int key;//edge weight
+            int edgeWeight;//edge weight
         }
         // Whether a vertex is in Set or not
         boolean[] mstset = new boolean[V];
@@ -95,25 +95,24 @@ class WGraph {
         // Stores the parents of a vertex
         int[] parent = new int[V];
 
-        for (int i = 0; i < V; i++)
-            e[i] = new Node();
 
         for (int i = 0; i < V; i++) {
             mstset[i] = false;// Initialize to false
-            e[i].key = Integer.MAX_VALUE; // Initialize key values to infinity
+            e[i] = new Node();
+            e[i].edgeWeight = Integer.MAX_VALUE; // Initialize key values to infinity
             e[i].vertex = i;
             parent[i] = -1;
         }
         // Include the source vertex in mstset
         mstset[0] = true;
         // Set key value to 0  so that it is extracted first out of PriorityQueue
-        e[0].key = 0;
+        e[0].edgeWeight = 0;
 
         TreeSet<Node> queue = new TreeSet<>((u, v) -> {
-            if(u.key - v.key !=0){
-                return u.key - v.key;
-            }else
-                return u.vertex-v.vertex;
+            if (u.edgeWeight - v.edgeWeight != 0) {
+                return u.edgeWeight - v.edgeWeight;
+            } else
+                return u.vertex - v.vertex;
         });
 
         for (int i = 0; i < V; i++) {
@@ -134,9 +133,9 @@ class WGraph {
                 if (mstset[wgNode.dest] == false) {
                     // update the key value of adjacent vertex
                     // to update first remove and add the updated vertex
-                    if (e[wgNode.dest].key > wgNode.weight) {
+                    if (e[wgNode.dest].edgeWeight > wgNode.weight) {
                         queue.remove(e[wgNode.dest]);
-                        e[wgNode.dest].key = wgNode.weight;
+                        e[wgNode.dest].edgeWeight = wgNode.weight;
                         queue.add(e[wgNode.dest]);
                         parent[wgNode.dest] = node0.vertex;
                     }
@@ -150,6 +149,66 @@ class WGraph {
         }
 
     }
+
+    /**
+     * O( (E+V)*logV) using Adjacency list and priority Queue
+     * O(logV) – to extract each vertex from queue. So for V vertices – O(VlogV)
+     * O(logV) – each time new pair object with new key value of a vertex and will be done
+     * for at most once for each edge. So for total E edge – O(ElogV)
+     * So over all complexity: O(VlogV) + O(ElogV) = O((E+V)logV) = O(ElogV)
+     */
+    public void dijkstraGetMinDistances(int src) {
+
+        //shortest path tree
+        boolean[] SPT = new boolean[V];
+        Set<Integer> settled = new HashSet<>();
+
+        //distance used to store the distance of vertex from a source
+        int[] distance = new int[V];
+
+        //Initialize all the distance to infinity
+        for (int i = 0; i < V; i++) {
+            distance[i] = Integer.MAX_VALUE;
+        }
+
+        //Initialize priority queue override the comparator to do the sorting based keys
+        // Add source node to the priority queue // weight is as distance from source
+        PriorityQueue<WGNode> pq = new PriorityQueue<>(V, (u, v) -> u.weight - v.weight);
+        pq.add(new WGNode(src, 0));
+
+        // Distance to the source is 0
+        distance[src] = 0;
+        while (settled.size() != V) {
+            // remove the minimum distance node from the priority queue
+            int u = pq.remove().dest;
+            // adding the node whose distance is finalized
+            settled.add(u);
+
+            // All the neighbors of v
+            for (int i = 0; i < adj.get(u).size(); i++) {
+                WGNode v = adj.get(u).get(i);
+
+                // If current node hasn't already been processed
+                if (!settled.contains(v.dest)) {
+                    int newDistance = distance[u] + v.weight;
+
+                    // If new distance is cheaper in cost
+                    if (newDistance < distance[v.dest]) {
+                        distance[v.dest] = newDistance;
+                    }
+                    // Add the current node to the queue
+                    pq.add(new WGNode(v.dest, distance[v.dest]));
+                }
+            }
+        }
+
+        System.out.println("The shorted path from node :");
+        for (int i = 0; i < V; i++) {
+            System.out.println(src + " to " + i + " is " + distance[i]);
+        }
+
+    }
+
 
 }
 
@@ -182,8 +241,12 @@ public class WeightedGraph {
         System.out.println("\n=== bfs === from 0");
         graph.bfs(0);
         System.out.println(" === ");
-        System.out.println(" === ");
+
+        System.out.println(" ===prims mst ");
         graph.prims_mst();
+
+        System.out.println(" ===Dijkstra ");
+        graph.dijkstraGetMinDistances(1);
 
     }
 }

@@ -58,7 +58,8 @@ public class AllocateRestaurantTable {
             boolean allocated = false;
 
             if (size <= 2) {
-                if ((twoSeaterTableNextFreeTime.peek() < (arrivalTime + 10)) && ((Math.max(twoSeaterTableNextFreeTime.peek(), arrivalTime) + timeRequired) <= 180)) {
+                if ((twoSeaterTableNextFreeTime.peek() < (arrivalTime + 10))
+                        && ((Math.max(twoSeaterTableNextFreeTime.peek(), arrivalTime) + timeRequired) <= 180)) {
                     allocatedTime = Math.max(twoSeaterTableNextFreeTime.poll(), arrivalTime);
                     waitTime = allocatedTime - arrivalTime;
                     nextFreeTime = allocatedTime + timeRequired;

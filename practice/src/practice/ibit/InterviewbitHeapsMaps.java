@@ -3,10 +3,7 @@ package practice.ibit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 
 public class InterviewbitHeapsMaps {
@@ -45,6 +42,98 @@ public class InterviewbitHeapsMaps {
         System.out.println(ibit.get(1));
         System.out.println(ibit.get(2));
         //----
+
+        System.out.println("Skyline problem===");
+        System.out.println(ibit.getSkyline(new int[][]{{2, 9, 10,}, {3, 7, 15,}, {5, 12, 12,}, {15, 20, 10,}, {19, 24, 8}}));
+
+        System.out.println(Arrays.toString(ibit.maxNumberFrom2ArrayMAintainingOrder(new int[]{3, 4, 6, 5},new int[]{9, 1, 2, 5, 8, 3},5 )));
+    }
+
+    public int[] maxNumberFrom2ArrayMAintainingOrder(int[] nums1, int[] nums2, int k) {
+        int get_from_nums1 = Math.min(nums1.length, k);
+        int[] ans = new int[k];
+        for (int i = Math.max(k - nums2.length, 0); i <= get_from_nums1; i++) {
+            int[] res1 = solve(nums1, i);
+            int[] res2 = solve(nums2, k - i);
+            int[] res = new int[k];
+            int pos1 = 0, pos2 = 0, tpos = 0;
+
+            while (res1.length > 0 && res2.length > 0 && pos1 < res1.length && pos2 < res2.length) {
+                if (compare(res1, pos1, res2, pos2))
+                    res[tpos++] = res1[pos1++];
+                else
+                    res[tpos++] = res2[pos2++];
+            }
+            while (pos1 < res1.length)
+                res[tpos++] = res1[pos1++];
+
+            while (pos2 < res2.length)
+                res[tpos++] = res2[pos2++];
+
+            if (!compare(ans, 0, res, 0))
+                ans = res;
+        }
+        return ans;
+    }
+
+    public boolean compare(int[] nums1, int start1, int[] nums2, int start2) {
+        for (; start1 < nums1.length && start2 < nums2.length; start1++, start2++) {
+            if (nums1[start1] > nums2[start2]) return true;
+            if (nums1[start1] < nums2[start2]) return false;
+        }
+        return start1 != nums1.length;
+    }
+
+    public int[] solve(int[] nums, int k) {
+        int[] res = new int[k];
+        int len = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (len > 0 && len + nums.length - i > k && res[len - 1] < nums[i]) {
+                len--;
+            }
+            if (len < k)
+                res[len++] = nums[i];
+        }
+        return res;
+    }
+
+    public List<int[]> getSkyline(int[][] buildings) {
+        List<int[]> result = new ArrayList<>();
+        List<int[]> height = new ArrayList<>();
+        for (int[] b : buildings) {
+            height.add(new int[]{b[0], -b[2]});
+            height.add(new int[]{b[1], b[2]});
+        }
+        Collections.sort(height, new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                if (a[0] != b[0]) {
+                    return a[0] - b[0];
+                } else {
+                    return a[1] - b[1];
+                }
+            }
+        });
+        Queue<Integer> pq = new PriorityQueue<Integer>(11, new Comparator<Integer>() {
+            public int compare(Integer i1, Integer i2) {
+                return i2 - i1;
+            }
+        });
+
+        pq.offer(0);
+        int prev = 0;
+        for (int[] h : height) {
+            if (h[1] < 0) {
+                pq.offer(-h[1]);
+            } else {
+                pq.remove(h[1]);
+            }
+            int cur = pq.peek();
+            if (prev != cur) {
+                result.add(new int[]{h[0], cur});
+                prev = cur;
+            }
+        }
+        return result;
     }
 
     class Node {
